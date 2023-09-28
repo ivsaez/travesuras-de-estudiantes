@@ -9,14 +9,10 @@ import {
   Input,
   ScenarioEndNoInteractions,
   ScenarioEndAllConditionsMet,
-  Agent,
 } from "agents-flow";
 import React, { useState, useEffect } from "react";
 import { AgentRepository } from "./repositories/agentRepository";
-import {
-  InteractionRepository,
-  EndingInteractionRepository,
-} from "./repositories/interactionRepository";
+import { InteractionRepository } from "./repositories/interactionRepository";
 import { LocationRepository } from "./repositories/locationRepository";
 import { Functions } from "./logic/functions";
 import { Rules } from "./logic/rules";
@@ -48,8 +44,6 @@ function App() {
   let agents: AgentRepository = new AgentRepository();
   let locations: LocationRepository = new LocationRepository();
   let interactions: InteractionRepository = new InteractionRepository();
-  let endingInteractions: EndingInteractionRepository =
-    new EndingInteractionRepository();
 
   let map: MapStructure = new MapStructure(locations.all);
 

@@ -12,10 +12,7 @@ import {
   Agent,
 } from "agents-flow";
 import React, { useState, useEffect } from "react";
-import {
-  AgentRepository,
-  EndingAgentRepository,
-} from "./repositories/agentRepository";
+import { AgentRepository } from "./repositories/agentRepository";
 import {
   InteractionRepository,
   EndingInteractionRepository,
@@ -30,7 +27,6 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
-import Form from "react-bootstrap/esm/Form";
 import Message from "./Message";
 import AgentMessage from "./AgentMessage";
 import Navbar from "react-bootstrap/esm/Navbar";
@@ -50,7 +46,6 @@ function App() {
   const [choices, setChoices] = useState([START] as string[]);
 
   let agents: AgentRepository = new AgentRepository();
-  let endingAgents: EndingAgentRepository = new EndingAgentRepository();
   let locations: LocationRepository = new LocationRepository();
   let interactions: InteractionRepository = new InteractionRepository();
   let endingInteractions: EndingInteractionRepository =
@@ -99,9 +94,6 @@ function App() {
     }
 
     map.move(agents.get("Raquel"), map.getLocation("Salon"));
-
-    map.move(endingAgents.get("Recepcionista"), map.getLocation("Recepcion"));
-    map.move(endingAgents.get("Mariano"), map.getLocation("Recepcion"));
   }
 
   function initializeAgentDesires(): void {
@@ -128,19 +120,8 @@ function App() {
       )
     );
 
-    var endingScenario = new Scenario(
-      "100 later",
-      map,
-      new Agents(endingAgents.all),
-      endingInteractions.all,
-      new FinishingConditions().with(
-        (scenario: Scenario) => scenario.turn === 20
-      )
-    ).inheritor();
-
     let newWorld = new World();
     newWorld.add(residenceScenario);
-    newWorld.add(endingScenario);
 
     setWorld(newWorld);
   }
@@ -227,13 +208,6 @@ function App() {
     agentMessage.sideToRight();
   }
 
-  function findAgentByName(name: string): Agent {
-    let agent = agents.get(name);
-    if (agent === null) agent = endingAgents.get(name);
-
-    return agent;
-  }
-
   return (
     <>
       <Navbar fixed="top" bg="primary" expand="lg">
@@ -258,7 +232,7 @@ function App() {
                   return (
                     <Message
                       agentMessage={message}
-                      image={buildPortraitFor(findAgentByName(message.agent))}
+                      image={buildPortraitFor(agents.get(message.agent))}
                     ></Message>
                   );
                 } else {

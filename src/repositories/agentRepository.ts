@@ -127,6 +127,128 @@ export class AgentRepository{
             [],
             false
         ));
+
+        // NEW CHALLENGERS -----------------------------------------------
+
+        this._elements.push(new Agent(
+            "Paco",
+            new Aspect(
+                SexKind.Male, 
+                OriginKind.European, 
+                EyeColor.Brown, 
+                HairColor.White, 
+                HaircutStyle.Bald, 
+                ComplexionKind.Thin, 
+                SpecieKind.Human, 
+                175, 
+                49),
+            new RelationSet()
+                .append("Goiko", RelationFactory.get(RelationKind.Enemy))
+                .append("Susi", RelationFactory.get(RelationKind.Neutral))
+                .append("Mari", RelationFactory.get(RelationKind.Neutral))
+                .append("Sebas", RelationFactory.get(RelationKind.Enemy)),
+            new Happiness(0),
+            new Personality(50, 40, 20, 20, 10),
+            Likes.likesSpecieAndSex(SpecieKind.Human, SexKind.Female),
+            [ /*"Republicano", "Residente", "Fumador"*/ ],
+            false
+        ));
+
+        this._elements.push(new Agent(
+            "Goiko",
+            new Aspect(
+                SexKind.Male, 
+                OriginKind.European, 
+                EyeColor.Blue, 
+                HairColor.Black, 
+                HaircutStyle.Short, 
+                ComplexionKind.Athletic, 
+                SpecieKind.Human, 
+                173, 
+                14),
+            new RelationSet()
+                .append("Paco", RelationFactory.get(RelationKind.Enemy))
+                .append("Susi", RelationFactory.get(RelationKind.Platonic))
+                .append("Mari", RelationFactory.get(RelationKind.Neutral))
+                .append("Sebas", RelationFactory.get(RelationKind.Friend)),
+            new Happiness(0),
+            new Personality(70, 60, 70, 80, 80),
+            Likes.likesSpecieAndSex(SpecieKind.Human, SexKind.Female),
+            [ /*"Republicano", "Residente", "Fumador"*/ ],
+            false
+        ));
+
+        this._elements.push(new Agent(
+            "Susi",
+            new Aspect(
+                SexKind.Female, 
+                OriginKind.European, 
+                EyeColor.Brown, 
+                HairColor.Brown, 
+                HaircutStyle.StraightLong, 
+                ComplexionKind.Thin, 
+                SpecieKind.Human, 
+                165, 
+                14),
+            new RelationSet()
+                .append("Paco", RelationFactory.get(RelationKind.Enemy))
+                .append("Goiko", RelationFactory.get(RelationKind.Best))
+                .append("Mari", RelationFactory.get(RelationKind.Friend))
+                .append("Sebas", RelationFactory.get(RelationKind.Friend)),
+            new Happiness(0),
+            new Personality(70, 60, 50, 60, 70),
+            Likes.likesSpecieAndSex(SpecieKind.Human, SexKind.Male),
+            [ /*"Republicano", "Residente", "Fumador"*/ ],
+            false
+        ));
+
+        this._elements.push(new Agent(
+            "Mari",
+            new Aspect(
+                SexKind.Female, 
+                OriginKind.European, 
+                EyeColor.Green, 
+                HairColor.Brown, 
+                HaircutStyle.CurvyLong, 
+                ComplexionKind.Fat, 
+                SpecieKind.Human, 
+                167, 
+                14),
+            new RelationSet()
+                .append("Paco", RelationFactory.get(RelationKind.Enemy))
+                .append("Goiko", RelationFactory.get(RelationKind.Friend))
+                .append("Susi", RelationFactory.get(RelationKind.Friend))
+                .append("Sebas", RelationFactory.get(RelationKind.Neutral)),
+            new Happiness(0),
+            new Personality(40, 50, 10, 40, 30),
+            Likes.likesSpecieAndSex(SpecieKind.Human, SexKind.Male),
+            [ /*"Republicano", "Residente", "Fumador"*/ ],
+            false
+        ));
+
+        this._elements.push(new Agent(
+            "Sebas",
+            new Aspect(
+                SexKind.Male, 
+                OriginKind.European, 
+                EyeColor.Brown, 
+                HairColor.Black, 
+                HaircutStyle.Shaved, 
+                ComplexionKind.Fat, 
+                SpecieKind.Human, 
+                180, 
+                14),
+            new RelationSet()
+                .append("Paco", RelationFactory.get(RelationKind.Enemy))
+                .append("Susi", RelationFactory.get(RelationKind.FuckFriend))
+                .append("Mari", RelationFactory.get(RelationKind.Sexy))
+                .append("Goiko", RelationFactory.get(RelationKind.Friend)),
+            new Happiness(0),
+            new Personality(30, 30, 80, 80, 70),
+            Likes.likesSpecieAndSex(SpecieKind.Human, SexKind.Female),
+            [ /*"Republicano", "Residente", "Fumador"*/ ],
+            false
+        ));
     }
 
     get all(){

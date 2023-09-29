@@ -21,6 +21,14 @@ export class LocationRepository{
         Location.join(salon, bath);
         Location.join(salon, terrace);
         Location.join(salon, limbo);
+
+        let sotano = new Location("Sotano");
+        let fuera = new Location("Fuera");
+
+        this._elements.push(sotano);
+        this._elements.push(fuera);
+
+        Location.join(sotano, fuera);
     }
 
     get all(){

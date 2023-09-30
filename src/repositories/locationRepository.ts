@@ -15,7 +15,7 @@ export class LocationRepository{
         this._elements.push(fuera);
 
         Location.join(sotano, fuera);
-        Location.join(fuera, limbo);
+        Location.join(sotano, limbo);
     }
 
     get all(){

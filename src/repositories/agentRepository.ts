@@ -29,7 +29,7 @@ export class AgentRepository{
             new Happiness(0),
             new Personality(50, 40, 20, 20, 10),
             Likes.likesSpecieAndSex(SpecieKind.Human, SexKind.Female),
-            [ "Bolsa", "Atado" ],
+            [ "Bolsa", "Atado", "Profesor" ],
             false
         ));
 
@@ -53,7 +53,7 @@ export class AgentRepository{
             new Happiness(0),
             new Personality(70, 60, 70, 80, 80),
             Likes.likesSpecieAndSex(SpecieKind.Human, SexKind.Female),
-            [ /*"Republicano", "Residente", "Fumador"*/ ],
+            [ "Estudiante" ],
             false
         ));
 
@@ -77,7 +77,7 @@ export class AgentRepository{
             new Happiness(0),
             new Personality(70, 60, 50, 60, 70),
             Likes.likesSpecieAndSex(SpecieKind.Human, SexKind.Male),
-            [ /*"Republicano", "Residente", "Fumador"*/ ],
+            [ "Estudiante" ],
             false
         ));
 
@@ -101,7 +101,7 @@ export class AgentRepository{
             new Happiness(0),
             new Personality(40, 50, 10, 40, 30),
             Likes.likesSpecieAndSex(SpecieKind.Human, SexKind.Male),
-            [ /*"Republicano", "Residente", "Fumador"*/ ],
+            [ "Estudiante" ],
             false
         ));
 
@@ -125,7 +125,7 @@ export class AgentRepository{
             new Happiness(0),
             new Personality(30, 30, 80, 80, 70),
             Likes.likesSpecieAndSex(SpecieKind.Human, SexKind.Female),
-            [ /*"Republicano", "Residente", "Fumador"*/ ],
+            [ "Estudiante" ],
             false
         ));
     }

@@ -5,6 +5,8 @@ export class Functions{
         new Function("Fin", Cardinality.None),
         new Function("Bolsa", Cardinality.One),
         new Function("Atado", Cardinality.One),
+        new Function("Estudiante", Cardinality.One),
+        new Function("Profesor", Cardinality.One),
         
         new Function("Penumbra", Cardinality.None),
         new Function("Luz", Cardinality.None),

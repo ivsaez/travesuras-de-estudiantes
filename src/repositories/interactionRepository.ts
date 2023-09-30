@@ -17,6 +17,22 @@ export class InteractionRepository{
     constructor(){
         this._elements = [];
 
+        this._elements.push(new Interaction(
+            "MirarEncapuchado",
+            "Mirar al encapuchado",
+            new RolesDescriptor("Mirador"),
+            [
+                new Phrase("Mirador")
+                    .withAlternative(roles => "[Mirador] mira con una mezcla de dudas y temor al pobre hombre atado con una bolsa en la cabeza.")
+            ],
+            Timing.GlobalSingle,
+            (postconditions, roles, map) => 
+                map.getUbication(roles.get("Mirador")).name === "Sotano" 
+                && roles.get("Mirador").IsActive
+                && roles.get("Mirador").Aspect.sex === SexKind.Female,
+            (roles, map) => TruthTable.empty
+        ));
+
         /*this._elements.push(new Interaction(
             "SubirPersianas",
             "Subir la persianas",

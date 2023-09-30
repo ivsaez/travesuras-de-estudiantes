@@ -17,7 +17,7 @@ export class InteractionRepository{
     constructor(){
         this._elements = [];
 
-        this._elements.push(new Interaction(
+        /*this._elements.push(new Interaction(
             "SubirPersianas",
             "Subir la persianas",
             new RolesDescriptor("Subidor"),
@@ -1834,7 +1834,7 @@ export class InteractionRepository{
                 map.move(roles.get("Marchante"), map.getLocation("Limbo"));
                 return TruthTable.empty;
             }
-        ));
+        ));*/
     }
 
     get all(){

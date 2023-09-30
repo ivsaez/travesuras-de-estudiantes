@@ -6,29 +6,16 @@ export class LocationRepository{
     constructor(){
         this._elements = [];
 
-        let salon = new Location("Salon");
-        let bath = new Location("Lavabo");
-        let terrace = new Location("Terraza");
         let limbo = new Location("Limbo");
-        let recepcion = new Location("Recepcion");
-
-        this._elements.push(salon);
-        this._elements.push(bath);
-        this._elements.push(terrace);
-        this._elements.push(limbo);
-        this._elements.push(recepcion);
-
-        Location.join(salon, bath);
-        Location.join(salon, terrace);
-        Location.join(salon, limbo);
-
         let sotano = new Location("Sotano");
         let fuera = new Location("Fuera");
 
+        this._elements.push(limbo);
         this._elements.push(sotano);
         this._elements.push(fuera);
 
         Location.join(sotano, fuera);
+        Location.join(fuera, limbo);
     }
 
     get all(){

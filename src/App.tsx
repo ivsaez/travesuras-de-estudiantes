@@ -87,7 +87,8 @@ function App() {
       map.move(agent, limbo);
     }
 
-    map.move(agents.get("Raquel"), map.getLocation("Salon"));
+    map.move(agents.get("Paco"), map.getLocation("Sotano"));
+    map.move(agents.get("Mari"), map.getLocation("Sotano"));
   }
 
   function initializeAgentDesires(): void {
@@ -102,8 +103,8 @@ function App() {
   }
 
   function createWorld(): void {
-    var residenceScenario = new Scenario(
-      "En la residencia",
+    var sotanoScenario = new Scenario(
+      "En la sótano",
       map,
       new Agents(agents.all),
       interactions.all,
@@ -115,7 +116,7 @@ function App() {
     );
 
     let newWorld = new World();
-    newWorld.add(residenceScenario);
+    newWorld.add(sotanoScenario);
 
     setWorld(newWorld);
   }

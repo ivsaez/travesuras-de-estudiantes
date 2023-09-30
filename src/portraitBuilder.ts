@@ -19,6 +19,10 @@ import goiko_unhappy from './images/goiko_unhappy.png';
 
 export function buildPortraitFor(agent: Agent): string{
     if(agent.Name === "Paco"){
+        if(agent.Characteristics.is("Bolsa")){
+            return paco_bolsa;
+        }
+
         return agent.Happiness.isHappy
             ? paco_happy
             : agent.Happiness.isUnhappy

@@ -2,6 +2,8 @@ import { Function, Cardinality } from "first-order-logic";
 
 export class Functions{
     private static _funcs: Function[] = [
+        new Function("Bolsa", Cardinality.One),
+        
         new Function("Penumbra", Cardinality.None),
         new Function("Luz", Cardinality.None),
         new Function("Lavabo", Cardinality.None),

@@ -1,86 +1,57 @@
 import { Agent } from "agents-flow";
 
-import anselmo_happy from './images/toon/anselmo_happy.png';
-import anselmo_normal from './images/toon/anselmo_normal.png';
-import anselmo_unhappy from './images/toon/anselmo_unhappy.png';
-import fructuoso_happy from './images/toon/fructuoso_happy.png';
-import fructuoso_normal from './images/toon/fructuoso_normal.png';
-import fructuoso_unhappy from './images/toon/fructuoso_unhappy.png';
-import jacinta_happy from './images/toon/jacinta_happy.png';
-import jacinta_normal from './images/toon/jacinta_normal.png';
-import jacinta_unhappy from './images/toon/jacinta_unhappy.png';
-import maria_happy from './images/toon/maria_happy.png';
-import maria_normal from './images/toon/maria_normal.png';
-import maria_unhappy from './images/toon/maria_unhappy.png';
-import mariano_happy from './images/toon/mariano_happy.png';
-import mariano_normal from './images/toon/mariano_normal.png';
-import mariano_unhappy from './images/toon/mariano_unhappy.png';
-import raquel_happy from './images/toon/raquel_happy.png';
-import raquel_normal from './images/toon/raquel_normal.png';
-import raquel_unhappy from './images/toon/raquel_unhappy.png';
-import recepcionista_happy from './images/toon/recepcionista_happy.png';
-import recepcionista_normal from './images/toon/recepcionista_normal.png';
-import recepcionista_unhappy from './images/toon/recepcionista_unhappy.png';
-import socorro_happy from './images/toon/socorro_happy.png';
-import socorro_normal from './images/toon/socorro_normal.png';
-import socorro_unhappy from './images/toon/socorro_unhappy.png';
+import paco_happy from './images/paco_happy.png';
+import paco_normal from './images/paco_normal.png';
+import paco_unhappy from './images/paco_unhappy.png';
+import paco_bolsa from './images/paco_bolsa.png';
+import sebas_happy from './images/sebas_happy.png';
+import sebas_normal from './images/sebas_normal.png';
+import sebas_unhappy from './images/sebas_unhappy.png';
+import susi_happy from './images/susi_happy.png';
+import susi_normal from './images/susi_normal.png';
+import susi_unhappy from './images/susi_unhappy.png';
+import mari_happy from './images/mari_happy.png';
+import mari_normal from './images/mari_normal.png';
+import mari_unhappy from './images/mari_unhappy.png';
+import goiko_happy from './images/goiko_happy.png';
+import goiko_normal from './images/goiko_normal.png';
+import goiko_unhappy from './images/goiko_unhappy.png';
 
 export function buildPortraitFor(agent: Agent): string{
-    if(agent.Name === "Anselmo"){
+    if(agent.Name === "Paco"){
         return agent.Happiness.isHappy
-            ? anselmo_happy
+            ? paco_happy
             : agent.Happiness.isUnhappy
-                ? anselmo_unhappy
-                : anselmo_normal;
+                ? paco_unhappy
+                : paco_normal;
     }
-    else if(agent.Name === "Fructuoso"){
+    else if(agent.Name === "Sebas"){
         return agent.Happiness.isHappy
-            ? fructuoso_happy
+            ? sebas_happy
             : agent.Happiness.isUnhappy
-                ? fructuoso_unhappy
-                : fructuoso_normal;
+                ? sebas_unhappy
+                : sebas_normal;
     }
-    else if(agent.Name === "Jacinta"){
+    else if(agent.Name === "Susi"){
         return agent.Happiness.isHappy
-            ? jacinta_happy
+            ? susi_happy
             : agent.Happiness.isUnhappy
-                ? jacinta_unhappy
-                : jacinta_normal;
+                ? susi_unhappy
+                : susi_normal;
     }
-    else if(agent.Name === "Maria"){
+    else if(agent.Name === "Mari"){
         return agent.Happiness.isHappy
-            ? maria_happy
+            ? mari_happy
             : agent.Happiness.isUnhappy
-                ? maria_unhappy
-                : maria_normal;
+                ? mari_unhappy
+                : mari_normal;
     }
-    else if(agent.Name === "Raquel"){
+    else if(agent.Name === "Goiko"){
         return agent.Happiness.isHappy
-            ? raquel_happy
+            ? goiko_happy
             : agent.Happiness.isUnhappy
-                ? raquel_unhappy
-                : raquel_normal;
-    }
-    else if(agent.Name === "Socorro"){
-        return agent.Happiness.isHappy
-            ? socorro_happy
-            : agent.Happiness.isUnhappy
-                ? socorro_unhappy
-                : socorro_normal;
-    }
-    else if(agent.Name === "Mariano"){
-        return agent.Happiness.isHappy
-            ? mariano_happy
-            : agent.Happiness.isUnhappy
-                ? mariano_unhappy
-                : mariano_normal;
-    }
-    else if(agent.Name === "Recepcionista"){
-        return agent.Happiness.isHappy
-            ? recepcionista_happy
-            : agent.Happiness.isUnhappy
-                ? recepcionista_unhappy
-                : recepcionista_normal;
+                ? goiko_unhappy
+                : goiko_normal;
     }
     
     return "";

@@ -7,15 +7,9 @@ export class Functions{
         new Function("Atado", Cardinality.One),
         new Function("Estudiante", Cardinality.One),
         new Function("Profesor", Cardinality.One),
+        new Function("Saludo", Cardinality.Two, "x", "y", true),
+        new Function("Pareja", Cardinality.Two, "x", "y", true),
         
-        new Function("Penumbra", Cardinality.None),
-        new Function("Luz", Cardinality.None),
-        new Function("Lavabo", Cardinality.None),
-        new Function("Balcon", Cardinality.None),
-        new Function("TeleCorazon", Cardinality.None),
-        new Function("TeleDeportes", Cardinality.None),
-        new Function("TelePolitica", Cardinality.None),
-        new Function("TeleApagada", Cardinality.None),
         new Function("Comer", Cardinality.None),
         new Function("Republicano", Cardinality.One),
         new Function("Nacional", Cardinality.One),
@@ -35,7 +29,7 @@ export class Functions{
         new Function("Recuerdo", Cardinality.One),
         new Function("Bueno", Cardinality.One),
         new Function("Malo", Cardinality.One),
-        new Function("Saludo", Cardinality.Two),
+        
     ];
 
     static get all(): Function[]{

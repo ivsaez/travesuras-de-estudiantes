@@ -115,6 +115,15 @@ function App() {
       )
     );
 
+    sotanoScenario.postconditions.add(
+      Sentence.build(
+        "Pareja",
+        agents.get("Goiko").Individual.name,
+        agents.get("Susi").Individual.name,
+        true
+      )
+    );
+
     let newWorld = new World();
     newWorld.add(sotanoScenario);
 

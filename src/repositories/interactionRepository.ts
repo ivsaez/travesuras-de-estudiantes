@@ -195,7 +195,7 @@ export class InteractionRepository{
         this._elements.push(new Interaction(
             "PreguntaQueHacemos",
             "Pregunta qué hacer",
-            new RolesDescriptor("Preguntador", [ "Preguntado", "Embolsado" ]),
+            new RolesDescriptor("Preguntador", [ "Preguntado" ]),
             [
                 new Phrase("Preguntador")
                     .withAlternative(roles => randomFromList([
@@ -218,8 +218,7 @@ export class InteractionRepository{
                 && roles.get("Preguntado").Aspect.sex === SexKind.Female
                 && roles.get("Preguntador").Characteristics.is("Estudiante")
                 && roles.get("Preguntado").Characteristics.is("Estudiante")
-                && roles.get("Embolsado").Characteristics.is("Bolsa")
-                && roles.get("Embolsado").Characteristics.is("Profesor")
+                && !postconditions.exists(Sentence.build("Desenmascarado"))
                 && postconditions.exists(Sentence.build("Saludo", roles.get("Preguntador").Individual.name, roles.get("Preguntado").Individual.name, true)),
                 (roles, map) => TruthTable.empty
         ));

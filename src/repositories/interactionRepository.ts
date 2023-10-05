@@ -25,13 +25,36 @@ export class InteractionRepository{
                 new Phrase("Mirador")
                     .withAlternative(roles => "[Mirador] mira con una mezcla de dudas y temor al pobre hombre atado con una bolsa en la cabeza.")
             ],
-            Timing.GlobalSingle,
+            Timing.Single,
             (postconditions, roles, map) => 
-                map.getUbication(roles.get("Mirador")).name === "Sotano" 
+                map.getUbication(roles.get("Mirador")).name === "Limbo" 
                 && roles.get("Mirador").IsActive
                 && roles.get("Mirador").Name === "Mari"
                 && roles.get("Mirador").Characteristics.is("Estudiante")
                 && roles.get("Mirador").Aspect.sex === SexKind.Female,
+                (roles, map) => {
+                    map.move(roles.get("Mirador"), map.getLocation("Sotano"));
+                    return TruthTable.empty;
+                }
+        ));
+
+        this._elements.push(new Interaction(
+            "Espera",
+            "Espera con nervios",
+            new RolesDescriptor("Esperador"),
+            [
+                new Phrase("Esperador")
+                    .withAlternative(roles => randomFromList([
+                        "[Esperador] se pregunta por qué no ha llegado aún todo el mundo.",
+                        "Que aún falte gente inquieta a [Esperador]."
+                    ]))
+            ],
+            Timing.Single,
+            (postconditions, roles, map) => 
+                map.getUbication(roles.get("Esperador")).name === "Sotano" 
+                && map.getLocation("Sotano").agents.length < 5
+                && roles.get("Esperador").IsActive
+                && roles.get("Esperador").Characteristics.is("Estudiante"),
             (roles, map) => TruthTable.empty
         ));
 
@@ -83,6 +106,7 @@ export class InteractionRepository{
                 && roles.get("Llegadora").IsActive
                 && roles.get("Llegadora").Aspect.sex === SexKind.Female
                 && roles.get("Llegadora").Characteristics.is("Estudiante")
+                && map.getLocation("Sotano").agents.some(a => a.Name === "Mari")
                 && postconditions.exists(Sentence.build("Pareja", roles.get("Llegador").Individual.name, roles.get("Llegadora").Individual.name, true)),
             (roles, map) => {
                 map.move(roles.get("Llegador"), map.getLocation("Sotano"));

@@ -88,7 +88,6 @@ function App() {
     }
 
     map.move(agents.get("Paco"), map.getLocation("Sotano"));
-    map.move(agents.get("Mari"), map.getLocation("Sotano"));
   }
 
   function initializeAgentDesires(): void {

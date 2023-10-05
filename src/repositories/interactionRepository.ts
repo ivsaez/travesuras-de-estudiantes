@@ -172,7 +172,7 @@ export class InteractionRepository{
 
         this._elements.push(new Interaction(
             "EmbolsadoAyuda",
-            "El hombre de la bolsa en la cabeza pide ayuda.",
+            "El hombre de la bolsa en la cabeza pide ayuda",
             new RolesDescriptor("Embolsado"),
             [
                 new Phrase("Embolsado")
@@ -186,32 +186,46 @@ export class InteractionRepository{
             Timing.Repeteable,
             (postconditions, roles, map) => 
                 roles.get("Embolsado").IsActive
+                && map.getLocation("Sotano").agents.length >= 2
                 && roles.get("Embolsado").Characteristics.is("Bolsa")
                 && roles.get("Embolsado").Characteristics.is("Profesor"),
                 (roles, map) => TruthTable.empty
         ));
 
-        /*
-        
         this._elements.push(new Interaction(
-            "Sentarse",
-            "[Sentador] se sienta",
-            new RolesDescriptor("Sentador"),
+            "PreguntaQueHacemos",
+            "Pregunta qué hacer",
+            new RolesDescriptor("Preguntador", [ "Preguntado", "Embolsado" ]),
             [
-                new Phrase("Sentador")
-                    .withAlternative(roles => "[Sentador] se sienta pesadamente en un butacón del salón.")
+                new Phrase("Preguntador")
+                    .withAlternative(roles => randomFromList([
+                        "[Preguntador]: Bueno, ¿y ahora qué hacemos?",
+                        "[Preguntador]: ¿Qué se supone que hacemos ahora?",
+                        "[Preguntador]: ¿Alguna idea de qué hacer con este?"
+                    ])),
+                new Phrase("Preguntado")
+                    .withAlternative(roles => randomFromList([
+                        "[Preguntado] se encoge de hombros.",
+                        "[Preguntado] mira para el suelo y no responde nada."
+                    ]))
             ],
             Timing.Single,
             (postconditions, roles, map) => 
-                map.getUbication(roles.get("Sentador")).name === "Salon" 
-                && postconditions.exists(Sentence.build("Luz"))
-                && roles.get("Sentador").IsActive
-                && roles.get("Sentador").Characteristics.is("Residente")
-                && !roles.get("Sentador").Characteristics.is("Impedido")
-                && !roles.get("Sentador").Characteristics.is("Demente"),
-            (roles, map) => TruthTable.empty
+                map.getLocation("Sotano").agents.length === 5
+                && roles.get("Preguntador").IsActive
+                && roles.get("Preguntado").IsActive
+                && roles.get("Preguntador").Aspect.sex === SexKind.Female
+                && roles.get("Preguntado").Aspect.sex === SexKind.Female
+                && roles.get("Preguntador").Characteristics.is("Estudiante")
+                && roles.get("Preguntado").Characteristics.is("Estudiante")
+                && roles.get("Embolsado").Characteristics.is("Bolsa")
+                && roles.get("Embolsado").Characteristics.is("Profesor")
+                && postconditions.exists(Sentence.build("Saludo", roles.get("Preguntador").Individual.name, roles.get("Preguntado").Individual.name, true)),
+                (roles, map) => TruthTable.empty
         ));
 
+        /*
+        
         this._elements.push(new Interaction(
             "AbrirLavabo",
             "[Abridor] abre el lavabo",

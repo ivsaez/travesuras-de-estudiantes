@@ -102,7 +102,7 @@ export class AgentRepository{
             new Personality(40, 50, 10, 40, 30),
             Likes.likesSpecieAndSex(SpecieKind.Human, SexKind.Male),
             [ "Estudiante" ],
-            false
+            true
         ));
 
         this._elements.push(new Agent(

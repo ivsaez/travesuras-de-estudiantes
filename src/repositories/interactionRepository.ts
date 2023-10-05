@@ -170,6 +170,27 @@ export class InteractionRepository{
                 .with(Sentence.build("Botellas"))
         ));
 
+        this._elements.push(new Interaction(
+            "EmbolsadoAyuda",
+            "El hombre de la bolsa en la cabeza pide ayuda.",
+            new RolesDescriptor("Embolsado"),
+            [
+                new Phrase("Embolsado")
+                    .withAlternative(roles => randomFromList([
+                        "[Embolsado]: ¿Hay alguien ahí?",
+                        "[Embolsado]: ¿Alguien puede oirme?",
+                        "[Embolsado]: Que alguien me ayude por favor",
+                        "[Embolsado]: Que alguien me quite esto de la cabeza, me falta el aire."
+                    ]))
+            ],
+            Timing.Repeteable,
+            (postconditions, roles, map) => 
+                roles.get("Embolsado").IsActive
+                && roles.get("Embolsado").Characteristics.is("Bolsa")
+                && roles.get("Embolsado").Characteristics.is("Profesor"),
+                (roles, map) => TruthTable.empty
+        ));
+
         /*
         
         this._elements.push(new Interaction(

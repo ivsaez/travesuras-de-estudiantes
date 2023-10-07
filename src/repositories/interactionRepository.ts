@@ -223,6 +223,60 @@ export class InteractionRepository{
                 (roles, map) => TruthTable.empty
         ));
 
+        this._elements.push(new Interaction(
+            "FlipaSituacion",
+            "Flipa con la situación",
+            new RolesDescriptor("Flipador"),
+            [
+                new Phrase("Flipador")
+                    .withAlternative(roles => randomFromList([
+                        "[Flipador]: Buah, no me puedo creer que tengamos a este pavo así.",
+                        "[Flipador]: Estoy flipando, no me creo que estemos haciendo esto.",
+                        "[Flipador]: ¿Estamos haciendo esto? Flipo. No me lo puedo creer."
+                    ]))
+            ],
+            Timing.Single,
+            (postconditions, roles, map) => 
+                map.getLocation("Sotano").agents.length === 5
+                && roles.get("Flipador").IsActive
+                && roles.get("Flipador").Aspect.sex === SexKind.Male
+                && roles.get("Flipador").Characteristics.is("Estudiante")
+                && !postconditions.exists(Sentence.build("Desenmascarado")),
+                (roles, map) => TruthTable.empty
+        ));
+
+        this._elements.push(new Interaction(
+            "PideSilencio",
+            "Pedir hablar más bajo",
+            new RolesDescriptor("Pedidor", ["Contestador"]),
+            [
+                new Phrase("Pedidor")
+                    .withAlternative(roles => randomFromList([
+                        "[Pedidor]: Hablad más bajo.",
+                        "[Pedidor]: Pssssst. Cuidado al hablar.",
+                        "[Pedidor]: Pssssst. No hagáis ruido."
+                    ])),
+                new Phrase("Contestador")
+                    .withAlternative(roles => randomFromList([
+                        "[Contestador]: Tranqui. No pasa nada.",
+                        "[Contestador]: No te rayes. Da igual.",
+                        "[Contestador]: No se entera de nada. No te preocupes."
+                    ]))
+            ],
+            Timing.Single,
+            (postconditions, roles, map) => 
+                map.getLocation("Sotano").agents.length === 5
+                && roles.get("Pedidor").IsActive
+                && roles.get("Pedidor").Aspect.sex === SexKind.Female
+                && roles.get("Pedidor").Characteristics.is("Estudiante")
+                && roles.get("Contestador").IsActive
+                && roles.get("Contestador").Aspect.sex === SexKind.Male
+                && roles.get("Contestador").Characteristics.is("Estudiante")
+                && !postconditions.exists(Sentence.build("Desenmascarado"))
+                && postconditions.exists(Sentence.build("Saludo", roles.get("Pedidor").Individual.name, roles.get("Contestador").Individual.name, true)),
+                (roles, map) => TruthTable.empty
+        ));
+
         /*
         
         this._elements.push(new Interaction(

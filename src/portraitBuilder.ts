@@ -1,4 +1,5 @@
 import { Agent } from "agents-flow";
+import { TruthTable, Sentence } from "first-order-logic";
 
 import paco_happy from './images/paco_happy.png';
 import paco_normal from './images/paco_normal.png';
@@ -17,9 +18,9 @@ import goiko_happy from './images/goiko_happy.png';
 import goiko_normal from './images/goiko_normal.png';
 import goiko_unhappy from './images/goiko_unhappy.png';
 
-export function buildPortraitFor(agent: Agent): string{
+export function buildPortraitFor(agent: Agent, postconditions: TruthTable): string{
     if(agent.Name === "Paco"){
-        if(agent.Characteristics.is("Bolsa")){
+        if(postconditions && !postconditions.exists(Sentence.build("Desenmascarado", "Paco"))){
             return paco_bolsa;
         }
 

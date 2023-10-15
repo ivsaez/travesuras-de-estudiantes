@@ -29,7 +29,7 @@ export class AgentRepository{
             new Happiness(0),
             new Personality(50, 40, 20, 20, 10),
             Likes.likesSpecieAndSex(SpecieKind.Human, SexKind.Female),
-            [ "Bolsa", "Atado", "Profesor" ],
+            [ "Profesor" ],
             false
         ));
 

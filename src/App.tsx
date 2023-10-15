@@ -235,7 +235,10 @@ function App() {
                   return (
                     <Message
                       agentMessage={message}
-                      image={buildPortraitFor(agents.get(message.agent))}
+                      image={buildPortraitFor(
+                        agents.get(message.agent),
+                        world.currentScenario?.postconditions
+                      )}
                     ></Message>
                   );
                 } else {

@@ -356,6 +356,131 @@ export class InteractionRepository{
                     .with(Sentence.build("Ubicado"))
         ));
 
+        this._elements.push(new Interaction(
+            "FantasearHostia",
+            "[Hostiador] fantasea con golpear al profesor",
+            new RolesDescriptor("Hostiador"),
+            [
+                new Phrase("Hostiador")
+                    .withAlternative(roles => randomFromList([
+                        "[Hostiador]: Ahora le podría dar una buena hostia a este tío.",
+                        "[Hostiador]: Podríamos darle una paliza sin problema.",
+                        "[Hostiador]: Como me gustaría soltarle una buena hostia.",
+                    ]))
+            ],
+            Timing.Single,
+            (postconditions, roles, map) => 
+                roles.get("Hostiador").IsActive
+                && postconditions.exists(Sentence.build("Ubicado"))
+                && roles.get("Hostiador").Characteristics.is("Estudiante")
+                && roles.get("Hostiador").Aspect.sex === SexKind.Male,
+                (roles, map) => TruthTable.empty
+        ));
+
+        this._elements.push(new Interaction(
+            "ReconocimientoSebas",
+            "[Reconocedor] reconoce a Sebas",
+            new RolesDescriptor("Reconocedor", [ "Reconocido" ]),
+            [
+                new Phrase("Reconocedor")
+                    .withAlternative(roles => "[Reconocedor]: Mira quien tenemos aquí, Sebastián Requena. No me sorprende en absoluto que estés aquí sabiendo las pocas luces que tienes.",
+                    roles => new Effect("Reconocido", [ 
+                        EffectComponent.negative(EffectKind.Friend, EffectStrength.Low),
+                        EffectComponent.negative(EffectKind.Happiness, EffectStrength.Low) 
+                    ])),
+                new Phrase("Reconocido")
+                    .withAlternative(roles => "[Reconocido]: ¡Voy a callarte esa puta bocaza!"),
+            ],
+            Timing.GlobalSingle,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("Ubicado"))
+                && !postconditions.exists(Sentence.build("Saludo", roles.get("Reconocedor").Individual.name, roles.get("Reconocido").Individual.name, true))
+                && roles.get("Reconocedor").IsActive
+                && roles.get("Reconocedor").Characteristics.is("Profesor")
+                && roles.get("Reconocido").Name === "Sebas"
+                && roles.get("Reconocido").Characteristics.is("Estudiante"),
+                (roles, map) => new TruthTable()
+                    .with(Sentence.build("Saludo", roles.get("Reconocedor").Individual.name, roles.get("Reconocido").Individual.name, true))
+        ));
+
+        this._elements.push(new Interaction(
+            "ReconocimientoGoiko",
+            "[Reconocedor] reconoce a Goiko",
+            new RolesDescriptor("Reconocedor", [ "Reconocido" ]),
+            [
+                new Phrase("Reconocedor")
+                    .withAlternative(roles => "[Reconocedor]: Ignacio Goikoechea, no podías faltar en una cafrada como ésta. Viendo lo que te rodea no me extrañaría que fuera idea tuya.",
+                    roles => new Effect("Reconocido", [ 
+                        EffectComponent.negative(EffectKind.Friend, EffectStrength.Low),
+                        EffectComponent.negative(EffectKind.Happiness, EffectStrength.Low) 
+                    ])),
+                new Phrase("Reconocido")
+                    .withAlternative(roles => "[Reconocido]: La única idea que tengo es darte una hostia, carcamal."),
+            ],
+            Timing.GlobalSingle,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("Ubicado"))
+                && !postconditions.exists(Sentence.build("Saludo", roles.get("Reconocedor").Individual.name, roles.get("Reconocido").Individual.name, true))
+                && roles.get("Reconocedor").IsActive
+                && roles.get("Reconocedor").Characteristics.is("Profesor")
+                && roles.get("Reconocido").Name === "Goiko"
+                && roles.get("Reconocido").Characteristics.is("Estudiante"),
+                (roles, map) => new TruthTable()
+                    .with(Sentence.build("Saludo", roles.get("Reconocedor").Individual.name, roles.get("Reconocido").Individual.name, true))
+        ));
+
+        this._elements.push(new Interaction(
+            "ReconocimientoSusi",
+            "[Reconocedor] reconoce a Susi",
+            new RolesDescriptor("Reconocedor", [ "Reconocido" ]),
+            [
+                new Phrase("Reconocedor")
+                    .withAlternative(roles => "[Reconocedor]: Mira quien hay aquí, Susana Sarabia. Supongo que arrastrándote detrás de Goikoechea, no sabes hacer otra cosa.",
+                    roles => new Effect("Reconocido", [ 
+                        EffectComponent.negative(EffectKind.Friend, EffectStrength.Low),
+                        EffectComponent.negative(EffectKind.Happiness, EffectStrength.Low) 
+                    ])),
+                new Phrase("Reconocido")
+                    .withAlternative(roles => "[Reconocido]: Que puto asco me das."),
+            ],
+            Timing.GlobalSingle,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("Ubicado"))
+                && !postconditions.exists(Sentence.build("Saludo", roles.get("Reconocedor").Individual.name, roles.get("Reconocido").Individual.name, true))
+                && roles.get("Reconocedor").IsActive
+                && roles.get("Reconocedor").Characteristics.is("Profesor")
+                && roles.get("Reconocido").Name === "Susi"
+                && roles.get("Reconocido").Characteristics.is("Estudiante"),
+                (roles, map) => new TruthTable()
+                    .with(Sentence.build("Saludo", roles.get("Reconocedor").Individual.name, roles.get("Reconocido").Individual.name, true))
+        ));
+
+        this._elements.push(new Interaction(
+            "ReconocimientoMari",
+            "[Reconocedor] reconoce a Mari",
+            new RolesDescriptor("Reconocedor", [ "Reconocido" ]),
+            [
+                new Phrase("Reconocedor")
+                    .withAlternative(roles => "[Reconocedor]: Y tú Maria, ¿qué haces enredada con estos? Acabas de tirar por la borda tu futuro.",
+                    roles => new Effect("Reconocido", [ 
+                        EffectComponent.negative(EffectKind.Friend, EffectStrength.Low),
+                        EffectComponent.negative(EffectKind.Happiness, EffectStrength.Low) 
+                    ])),
+                new Phrase("Reconocido")
+                    .withAlternative(roles => "[Reconocido]: No sé de qué futuro me hablas."),
+            ],
+            Timing.GlobalSingle,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("Ubicado"))
+                && !postconditions.exists(Sentence.build("Saludo", roles.get("Reconocedor").Individual.name, roles.get("Reconocido").Individual.name, true))
+                && roles.get("Reconocedor").IsActive
+                && roles.get("Reconocedor").Characteristics.is("Profesor")
+                && roles.get("Reconocido").Name === "Mari"
+                && roles.get("Reconocido").Characteristics.is("Estudiante"),
+                (roles, map) => new TruthTable()
+                    .with(Sentence.build("Saludo", roles.get("Reconocedor").Individual.name, roles.get("Reconocido").Individual.name, true))
+        ));
+
         /*
 
         this._elements.push(new Interaction(

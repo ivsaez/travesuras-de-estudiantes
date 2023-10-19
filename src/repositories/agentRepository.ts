@@ -2,6 +2,7 @@ import { Agent } from "agents-flow";
 import { Aspect, Likes, SexKind, OriginKind, EyeColor, HairColor, HaircutStyle, ComplexionKind, SpecieKind } from "npc-aspect";
 import { RelationSet, RelationFactory, RelationKind, Familiar } from "npc-relations";
 import { Happiness, Personality } from "npc-mind";
+import { Alcoholic } from "../models/Alcoholic";
 
 export class AgentRepository{
     private _elements: Agent[];
@@ -33,7 +34,7 @@ export class AgentRepository{
             false
         ));
 
-        this._elements.push(new Agent(
+        this._elements.push(new Alcoholic(
             "Goiko",
             new Aspect(
                 SexKind.Male, 
@@ -57,7 +58,7 @@ export class AgentRepository{
             false
         ));
 
-        this._elements.push(new Agent(
+        this._elements.push(new Alcoholic(
             "Susi",
             new Aspect(
                 SexKind.Female, 
@@ -81,7 +82,7 @@ export class AgentRepository{
             false
         ));
 
-        this._elements.push(new Agent(
+        this._elements.push(new Alcoholic(
             "Mari",
             new Aspect(
                 SexKind.Female, 
@@ -105,7 +106,7 @@ export class AgentRepository{
             true
         ));
 
-        this._elements.push(new Agent(
+        this._elements.push(new Alcoholic(
             "Sebas",
             new Aspect(
                 SexKind.Male, 

@@ -10,6 +10,7 @@ import { SexKind } from "npc-aspect";
 import { Effect, EffectComponent, EffectKind, EffectStrength } from "npc-emotional";
 import { randomFromList, check } from "role-methods";
 import { Familiar } from "npc-relations";
+import { Alcoholic, IAlcoholic } from "../models/Alcoholic";
 
 export class InteractionRepository{
     private _elements: IInteraction[];
@@ -29,6 +30,7 @@ export class InteractionRepository{
             (postconditions, roles, map) => 
                 map.getUbication(roles.get("Mirador")).name === "Limbo" 
                 && roles.get("Mirador").IsActive
+                && Alcoholic.is(roles.get("Mirador"))
                 && roles.get("Mirador").Name === "Mari"
                 && roles.get("Mirador").Characteristics.is("Estudiante")
                 && roles.get("Mirador").Aspect.sex === SexKind.Female,

@@ -9,8 +9,7 @@ import { TruthTable, Sentence } from "first-order-logic";
 import { SexKind } from "npc-aspect";
 import { Effect, EffectComponent, EffectKind, EffectStrength } from "npc-emotional";
 import { randomFromList, check } from "role-methods";
-import { Familiar } from "npc-relations";
-import { Alcoholic, IAlcoholic } from "../models/Alcoholic";
+import { Alcoholic } from "../models/Alcoholic";
 
 export class InteractionRepository{
     private _elements: IInteraction[];
@@ -481,6 +480,69 @@ export class InteractionRepository{
                 && roles.get("Reconocido").Characteristics.is("Estudiante"),
                 (roles, map) => new TruthTable()
                     .with(Sentence.build("Saludo", roles.get("Reconocedor").Individual.name, roles.get("Reconocido").Individual.name, true))
+        ));
+
+        this._elements.push(new Interaction(
+            "SebasCopa",
+            "[Servidor] le sirve una copa a [Servido]",
+            new RolesDescriptor("Servidor", [ "Servido" ]),
+            [
+                new Phrase("Servidor", "Servido")
+                    .withAlternative(roles => {
+                        const bebidas = [ "Xibeca", "Malibú", "Dyc" ]; 
+                        const bebida1 = randomFromList(bebidas);
+                        const bebida2 = randomFromList(bebidas.filter(x => x !== bebida1));
+                        return `[Servidor] prepara una copa mezclando ${bebida1} y ${bebida2} y se la sirve a [Servido].`;
+                    }),
+                new Phrase("Servido")
+                    .withAlternative(roles => {
+                        Alcoholic.to(roles.get("Servido")).glass.fill();
+                        return "[Servido] acepta el brebaje.";
+                    })
+                    .withAlternative(roles => "[Servido] declina el ofrecimiento."),
+            ],
+            Timing.Repeteable,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("Ubicado"))
+                && roles.get("Servidor").IsActive
+                && roles.get("Servidor").Characteristics.is("Estudiante")
+                && roles.get("Servidor").Name === "Sebas"
+                && roles.get("Servido").IsActive
+                && roles.get("Servido").Characteristics.is("Estudiante")
+                && Alcoholic.is(roles.get("Servido"))
+                && Alcoholic.to(roles.get("Servido")).glass.isEmpty()
+                && postconditions.exists(Sentence.build("Botellas"))
+                && postconditions.exists(Sentence.build("Saludo", roles.get("Servidor").Individual.name, roles.get("Servido").Individual.name, true)),
+                (roles, map) => TruthTable.empty
+        ));
+
+        this._elements.push(new Interaction(
+            "BeberTrago",
+            "[Bebedor] bebe un trago de su vaso",
+            new RolesDescriptor("Bebedor"),
+            [
+                new Phrase("Bebedor")
+                    .withAlternative(roles => {
+                        const drinked = Alcoholic.to(roles.get("Bebedor")).glass.drink();
+                        if(drinked)
+                            Alcoholic.to(roles.get("Bebedor")).alcoholism.increaseLevel();
+
+                        const emptied = Alcoholic.to(roles.get("Bebedor")).glass.isEmpty();
+                        return drinked
+                            ? emptied
+                                ? "[Bebedor] apura de un trago lo que queda en el vaso."
+                                : "[Bebedor] se bebe un trago de su vaso."
+                            : "[Bebedor] intenta beber pero su vaso está vacío.";
+                    }),
+            ],
+            Timing.Repeteable,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("Ubicado"))
+                && roles.get("Bebedor").IsActive
+                && roles.get("Bebedor").Characteristics.is("Estudiante")
+                && Alcoholic.is(roles.get("Bebedor"))
+                && !Alcoholic.to(roles.get("Bebedor")).glass.isEmpty(),
+                (roles, map) => TruthTable.empty
         ));
 
         /*

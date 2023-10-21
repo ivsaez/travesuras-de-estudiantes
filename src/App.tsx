@@ -224,7 +224,7 @@ function App() {
               src={logo}
               height="30"
               className="d-inline-block align-top"
-              alt="La residencia logo"
+              alt="Travesuras de estudiantes logo"
             />
           </Navbar.Brand>
         </Container>
@@ -260,7 +260,7 @@ function App() {
                   <Button
                     name={index + ""}
                     className="mb-2"
-                    variant="primary"
+                    variant="danger"
                     onClick={onButtonClick}
                   >
                     {choice}

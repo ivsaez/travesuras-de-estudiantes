@@ -10,7 +10,9 @@ export class Functions{
         new Function("Estudiante", Cardinality.One),
         new Function("Profesor", Cardinality.One),
         new Function("Saludo", Cardinality.Two, "x", "y", true),
-        new Function("Pareja", Cardinality.Two, "x", "y", true)
+        new Function("Pareja", Cardinality.Two, "x", "y", true),
+        new Function("Amenaza", Cardinality.Two, "x", "y", true),
+        new Function("Manipula", Cardinality.Two, "x", "y", true)
     ];
 
     static get all(): Function[]{

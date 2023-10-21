@@ -539,7 +539,123 @@ export class InteractionRepository{
                 (roles, map) => TruthTable.empty
         ));
 
+        this._elements.push(new Interaction(
+            "AmenazaAlumno",
+            "[Amenazador] amenaza a [Amenazado]",
+            new RolesDescriptor("Amenazador", [ "Amenazado" ]),
+            [
+                new Phrase("Amenazador", "Amenazado")
+                    .withAlternative(roles => {
+                        if(roles.get("Amenazado").Name === "Mari")
+                            return "[Amenazador]: Después de esto se te acabó todo Maria. Irás al reformatorio. Olvídate de estudios o de llegar a nada en la vida.";
 
+                        if(roles.get("Amenazado").Name === "Sebas")
+                            return "[Amenazador]: Sebastián, siempre has sido el más tonto de mis alumnos. Solo te faltaba esto para colocarte la corona.";
+
+                        if(roles.get("Amenazado").Name === "Goiko")
+                            return "[Amenazador]: Ignacio eres la misma chusma que tu padre, y terminarás igual que él. En la cárcel.";
+
+                        if(roles.get("Amenazado").Name === "Susi")
+                            return "[Amenazador]: Susana, para lo único que tienes talento es para ser la furcia de algún chulo. Como tu madre y como tu hermana.";
+                    },
+                    roles => new Effect("Amenazado", [ 
+                        EffectComponent.negative(EffectKind.Friend, EffectStrength.Low),
+                        EffectComponent.negative(EffectKind.Happiness, EffectStrength.Low) 
+                    ])),
+                new Phrase("Amenazado")
+                    .withAlternative(roles => {
+                        if(roles.get("Amenazado").Name === "Mari")
+                            return "[Amenazado]: Con la edad que tenemos somos inimputables.";
+
+                        if(roles.get("Amenazado").Name === "Sebas")
+                            return "[Amenazado]: Seré todo lo tonto que quieras, pero el que está encerrado y atado en una silla eres tú.";
+
+                        if(roles.get("Amenazado").Name === "Goiko")
+                            return "[Amenazado]: Mi padre era otro viejo hijo de puta igual que tú. Te pareces más a él que yo.";
+
+                        if(roles.get("Amenazado").Name === "Susi")
+                            return "[Amenazado]: Probablemente mi madre ande con chulos. Con quien seguro que no andará nunca es con un perdedo como tú.";
+                    }),
+            ],
+            Timing.Single,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("Ubicado"))
+                && postconditions.exists(Sentence.build("Saludo", roles.get("Amenazador").Individual.name, roles.get("Amenazado").Individual.name, true))
+                && !postconditions.exists(Sentence.build("Amenaza", roles.get("Amenazador").Individual.name, roles.get("Amenazado").Individual.name, true))
+                && roles.get("Amenazador").IsActive
+                && roles.get("Amenazador").Characteristics.is("Profesor")
+                && roles.get("Amenazado").IsActive
+                && roles.get("Amenazado").Characteristics.is("Estudiante"),
+                (roles, map) => new TruthTable()
+                    .with(Sentence.build("Amenaza", roles.get("Amenazador").Individual.name, roles.get("Amenazado").Individual.name, true))
+        ));
+
+        this._elements.push(new Interaction(
+            "ManipulaAlumno",
+            "[Manipulador] manipula a [Manipulado]",
+            new RolesDescriptor("Manipulador", [ "Manipulado", "Convencedor" ]),
+            [
+                new Phrase("Manipulador", "Manipulado")
+                    .withAlternative(roles => {
+                        if(roles.get("Manipulado").Name === "Mari")
+                            return "[Manipulador]: Si no fuera por mi tus padres ya te habrían forzado a dejar de estudiar Maria. ¿Así es como me lo pagas?";
+
+                        if(roles.get("Manipulado").Name === "Sebas")
+                            return "[Manipulador]: Y pensar que te perdoné una expulsión y te evité otra paliza de tu padre. Tendría que haberte jodido Sebastián, esa es la única lección que entendéis los idiotas.";
+
+                        if(roles.get("Manipulado").Name === "Goiko")
+                            return "[Manipulador]: Venga Ignacio, hazles un favor a tus amigos y ordénales que paren esta tontería. No les jodas la vida. Tú eres el auténtico responsable de sus destinos.";
+
+                        if(roles.get("Manipulado").Name === "Susi")
+                            return "[Manipulador]: Venga Susana, llévate a Ignacio fuera y hazle lo que sea que le hagas para convencerle de que abandone esta idea estúpida. Aún puedes evitar que os jodáis la vida a lo tonto.";
+                    }),
+                new Phrase("Manipulado")
+                    .withAlternative(roles => {
+                        if(roles.get("Manipulado").Name === "Mari")
+                            return "[Manipulado]: Yo te agradecí lo de mis padres, pero es que...";
+
+                        if(roles.get("Manipulado").Name === "Sebas")
+                            return "[Manipulado]: Bueno vale, me ahorré una paliza pero...";
+
+                        if(roles.get("Manipulado").Name === "Goiko")
+                            return "[Manipulado]: Esto no es sólo cosa mia joder. ¿Verdad?";
+
+                        if(roles.get("Manipulado").Name === "Susi")
+                            return "[Manipulado]: Esto va a salir bien, sino Goiko no lo haría...";
+                    }),
+                new Phrase("Convencedor", "Manipulado")
+                    .withAlternative(roles => {
+                        if(roles.get("Manipulado").Name === "Mari")
+                            return "[Convencedor]: No dudes [Manipulado]. Recuerda que te obligó a espiar a tus compañeros y a contarle nuestras miserias. Te utilizó.";
+
+                        if(roles.get("Manipulado").Name === "Sebas")
+                            return "[Convencedor]: Por una paliza que te ahorró te provocó otras diez. No escuches a este cabronazo [Manipulado].";
+
+                        if(roles.get("Manipulado").Name === "Goiko")
+                            return "[Convencedor]: Siempre ha querido destruirte porque tiene envidia de ti [Manipulado]. Tienes todo lo que él nunca tendrá.";
+
+                        if(roles.get("Manipulado").Name === "Susi")
+                            return "[Convencedor]: Te acusa de zorra pero fue él el que te frotó el paquete en el viaje de fin de curso. Es un puto cerdo [Susi].";
+                    },
+                    roles => new Effect("Manipulado", [ 
+                        EffectComponent.positive(EffectKind.Friend, EffectStrength.Medium),
+                        EffectComponent.positive(EffectKind.Happiness, EffectStrength.Low) 
+                    ])),
+            ],
+            Timing.Single,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("Ubicado"))
+                && postconditions.exists(Sentence.build("Saludo", roles.get("Manipulador").Individual.name, roles.get("Manipulado").Individual.name, true))
+                && !postconditions.exists(Sentence.build("Manipula", roles.get("Manipulador").Individual.name, roles.get("Manipulado").Individual.name, true))
+                && roles.get("Manipulador").IsActive
+                && roles.get("Manipulador").Characteristics.is("Profesor")
+                && roles.get("Manipulado").IsActive
+                && roles.get("Manipulado").Characteristics.is("Estudiante")
+                && roles.get("Convencedor").IsActive
+                && roles.get("Convencedor").Characteristics.is("Estudiante"),
+                (roles, map) => new TruthTable()
+                    .with(Sentence.build("Manipula", roles.get("Manipulador").Individual.name, roles.get("Manipulado").Individual.name, true))
+        ));
 
         /*
         this._elements.push(new Interaction(

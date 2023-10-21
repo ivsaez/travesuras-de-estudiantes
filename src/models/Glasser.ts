@@ -21,6 +21,10 @@ export class Glass{
         return true;
     }
 
+    get shots(): number {
+        return this._shots;
+    }
+
     isEmpty(): boolean {
         return this._shots === 0;
     }

@@ -9,6 +9,7 @@ import {
   Input,
   ScenarioEndNoInteractions,
   ScenarioEndAllConditionsMet,
+  Desire,
 } from "agents-flow";
 import React, { useState, useEffect } from "react";
 import { AgentRepository } from "./repositories/agentRepository";
@@ -28,6 +29,7 @@ import AgentMessage from "./AgentMessage";
 import Navbar from "react-bootstrap/esm/Navbar";
 import { buildPortraitFor } from "./portraitBuilder";
 import logo from "./images/logo.png";
+import { Alcoholic } from "./models/Alcoholic";
 
 const CONTINUE = "Continuar";
 const START = "Comenzar";
@@ -91,14 +93,16 @@ function App() {
   }
 
   function initializeAgentDesires(): void {
-    /*let ron = agents.get("Ron");
-    let agatha = agents.get("Agatha");
+    const goiko = agents.get("Goiko");
 
-    ron.Desires.append(new Desire(crowd => {
-      let aga = crowd.get("Agatha");
-      let relation = aga.Relations.get("Ron");
-      return (relation.metrics.friendship + relation.metrics.love + agatha.Happiness.value) / 3;
-    }, [ agatha.Name ]));*/
+    goiko.Desires.append(
+      new Desire((crowd) => {
+        const goiko = crowd.get("Goiko");
+        return (
+          Alcoholic.to(goiko).alcoholism.level + Alcoholic.to(goiko).glass.shots
+        );
+      }, [])
+    );
   }
 
   function createWorld(): void {

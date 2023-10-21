@@ -495,10 +495,13 @@ export class InteractionRepository{
                         return `[Servidor] prepara una copa mezclando ${bebida1} y ${bebida2} y se la sirve a [Servido].`;
                     }),
                 new Phrase("Servido")
-                    .withAlternative(roles => {
-                        Alcoholic.to(roles.get("Servido")).glass.fill();
-                        return "[Servido] acepta el brebaje.";
-                    })
+                    .withAlternative(
+                        roles => "[Servido] acepta el brebaje.", 
+                        roles => Effect.null(), 
+                        roles => {
+                            Alcoholic.to(roles.get("Servido")).glass.fill();
+                            return Sentence.build("Nothing");
+                        })
                     .withAlternative(roles => "[Servido] declina el ofrecimiento."),
             ],
             Timing.Repeteable,
@@ -542,7 +545,7 @@ export class InteractionRepository{
                 && roles.get("Bebedor").Characteristics.is("Estudiante")
                 && Alcoholic.is(roles.get("Bebedor"))
                 && !Alcoholic.to(roles.get("Bebedor")).glass.isEmpty(),
-                (roles, map) => TruthTable.empty
+            (roles, map) => TruthTable.empty
         ));
 
         this._elements.push(new Interaction(
@@ -562,7 +565,7 @@ export class InteractionRepository{
                         : randomFromList([
                             "[Insultador]: Seguro que eres un pichafloja.",
                             "[Insultador]: Que puto asco das viejales.",
-                            "[Insultador]: No eres mas que un puto viejo verde salido.",
+                            "[Insultador]: No eres más que un puto viejo verde salido.",
                             "[Insultador]: Baboso de mierda.",
                             "[Insultador]: A los cerdos como tu os tendrían que cortar la polla.",
                         ]),
@@ -573,7 +576,7 @@ export class InteractionRepository{
                     .withAlternative(roles => randomFromList([
                         "[Insultado]: No insulta el que quiere, sino el que puede.",
                         "[Insultado]: Aprende a insultar.",
-                        "[Insultado]: ¿Eso es lo mejor que se te ocurre?.",
+                        "[Insultado]: ¿Eso es lo mejor que se te ocurre?",
                         "[Insultado]: Seguro que llevas un buen rato pensando para elaborar una frase tan complicada.",
                         "[Insultado]: Voy a intentar ponerme a tu nivel. Rebota rebota y en tu culo explota.",
                         "[Insultado]: Necesitas urgentemente un diccionario.",
@@ -591,7 +594,6 @@ export class InteractionRepository{
         ));
 
         /*
-
         this._elements.push(new Interaction(
             "IrBalcon",
             "[Desplazado] sale al balcón",
@@ -615,30 +617,6 @@ export class InteractionRepository{
             },
         ));
 
-        this._elements.push(new Interaction(
-            "Fumar",
-            "[Fumador] se fuma un cigarro",
-            new RolesDescriptor("Fumador"),
-            [
-                new Phrase("Fumador")
-                    .withAlternative(roles => randomFromList([
-                        "[Fumador] se fuma un cigarro mientras dirige su mirada perdida a la calle.",
-                        "[Fumador] se fuma un cigarro con ansia.",
-                        "[Fumador] apura un cigarro mirando alrededor.",
-                    ]))
-            ],
-            Timing.Repeteable,
-            (postconditions, roles, map) =>
-                roles.get("Fumador").Happiness.isUnhappy
-                && roles.get("Fumador").IsActive
-                && roles.get("Fumador").Characteristics.is("Auxiliar")
-                && map.getUbication(roles.get("Fumador")).name === "Terraza",
-            (roles, map) => 
-            {
-                roles.get("Fumador").Happiness.increase(30);
-                return TruthTable.empty;
-            },
-        ));
 
         this._elements.push(new Interaction(
             "VolverBalcon",
@@ -765,95 +743,7 @@ export class InteractionRepository{
                 .with(Sentence.build("TelePolitica"))
         ));
 
-        this._elements.push(new Interaction(
-            "CaeAlgo",
-            "A [Caedor] se le cae algo",
-            new RolesDescriptor("Caedor", [ "Recogedor" ]),
-            [
-                new Phrase("Caedor", "Recogedor")
-                    .withAlternative(roles => randomFromList([
-                        "[Caedor] tira disimuladamente un pañuelo al suelo cuando [Recogedor] pasa por su lado.",
-                        "[Caedor] tira fingiendo un despiste su reloj de bolsillo al suelo cuando [Recogedor] pasa por su lado."
-                    ])),
-                new Phrase("Recogedor", "Caedor")
-                    .withAlternative(
-                        roles => "[Recogedor] se agacha justo delante de [Caedor] y se lo devuelve.",
-                        roles => new Effect("Caedor", [
-                            EffectComponent.positive(EffectKind.Sex, EffectStrength.Medium),
-                            EffectComponent.positive(EffectKind.Happiness, EffectStrength.Low)
-                        ])),
-                new Phrase("Caedor", "Recogedor")
-                    .withAlternative(roles => "[Caedor]: Muchas gracias guapísima.")
-            ],
-            Timing.Single,
-            (postconditions, roles, map) => 
-                map.getUbication(roles.get("Caedor")).name === "Salon"
-                && map.areInTheSameLocation(roles.get("Caedor"), roles.get("Recogedor"))
-                && roles.get("Recogedor").Characteristics.is("Auxiliar")
-                && roles.get("Caedor").Characteristics.is("Residente")
-                && !roles.get("Caedor").Characteristics.is("Demente")
-                && roles.get("Caedor").Aspect.sex === SexKind.Male
-                && roles.get("Recogedor").IsActive
-                && roles.get("Caedor").IsActive
-                && !postconditions.exists(Sentence.build("Agresor", roles.get("Caedor").Individual.name))
-                && postconditions.exists(Sentence.build("Saludo", roles.get("Caedor").Individual.name, roles.get("Recogedor").Individual.name, true)),
-            (roles, map) => TruthTable.empty
-        ).intimate());
 
-        this._elements.push(new Interaction(
-            "Medicacion",
-            "[Medicador] da la medicación a [Medicado]",
-            new RolesDescriptor("Medicador", [ "Medicado" ]),
-            [
-                new Phrase("Medicador", "Medicado")
-                    .withAlternative(roles => "[Medicador] prepara el pastillero y un vasito de agua para [Medicado]."),
-                new Phrase("Medicador", "Medicado")
-                    .withAlternative(
-                        roles => roles.get("Medicado").Characteristics.is("Demente")
-                            ? "[Medicador]: Venga, le abrimos la boquita y pa'dentro."
-                            : randomFromList([
-                                "[Medicador]: Venga [Medicado], ya tienes preparadas tus chucherías de la mañana.",
-                                "[Medicador]: Venga [Medicado], aquí tienes el vasito con los caramelitos matutinos.",
-                                "[Medicador]: Venga [Medicado], todas de un trago. Que te vea yo.",
-                            ]),
-                        roles => roles.get("Medicado").Characteristics.is("Demente") 
-                            ? Effect.null() 
-                            : new Effect("Medicado", [ EffectComponent.negative(EffectKind.Happiness, EffectStrength.Medium) ])
-                    ),
-                new Phrase("Medicado")
-                    .withAlternative(
-                        roles => roles.get("Medicado").Characteristics.is("Demente") 
-                            ? "[Medicado] se traga las pastillas mecánicamente." 
-                            : "[Medicado] se traga las pastillas a disgusto.",
-                        roles => Effect.null(),
-                        roles => Sentence.build("Medicado", roles.get("Medicado").Individual.name)
-                    )
-                    .withAlternative(
-                        roles => roles.get("Medicado").Characteristics.is("Demente") 
-                            ? "[Medicado] se traga las pastillas mecánicamente." 
-                            : "[Medicado] finge tragarse las pastillas para escupirlas después.",
-                        roles => Effect.null(),
-                        roles => roles.get("Medicado").Characteristics.is("Demente") 
-                            ? Sentence.build("Medicado", roles.get("Medicado").Individual.name)
-                            : Sentence.build("MedicadoFake", roles.get("Medicado").Individual.name)
-                    )
-            ],
-            Timing.Single,
-            (postconditions, roles, map) => 
-                map.getUbication(roles.get("Medicador")).name === "Salon"
-                && map.areInTheSameLocation(roles.get("Medicador"), roles.get("Medicado"))
-                && roles.get("Medicador").Characteristics.is("Auxiliar")
-                && roles.get("Medicado").Characteristics.is("Residente")
-                && roles.get("Medicador").IsActive
-                && roles.get("Medicado").IsActive
-                && postconditions.exists(Sentence.build("Luz"))
-                && postconditions.exists(Sentence.build("Balcon"))
-                && postconditions.exists(Sentence.build("Lavabo"))
-                && !postconditions.exists(Sentence.build("Medicado", roles.get("Medicado").Individual.name))
-                && !postconditions.exists(Sentence.build("MedicadoFake", roles.get("Medicado").Individual.name))
-                && postconditions.exists(Sentence.build("Saludo", roles.get("Medicador").Individual.name, roles.get("Medicado").Individual.name, true)),
-            (roles, map) => TruthTable.empty
-        ).intimate());
 
         this._elements.push(new Interaction(
             "IrLavabo",
@@ -1204,61 +1094,6 @@ export class InteractionRepository{
             }
         ));
 
-        this._elements.push(new Interaction(
-            "CriticaBalconDesconocido",
-            "[Criticon] grita a un transeúnte",
-            new RolesDescriptor("Criticon"),
-            [
-                new Phrase("Criticon")
-                    .withAlternative(roles => "[Criticon] se asoma por la barandilla del balcón y ve a alguien pasar."),
-                new Phrase("Criticon")
-                    .withAlternative(roles => randomFromList([
-                        "[Criticon]: ¡Tápate el canalillo fresca! ¡Te veo el ombligo desde aquí!",
-                        "[Criticon]: ¡No mires al movil al andar atontao! ¡Que te vas a estampar con una farola!",
-                        "[Criticon]: ¡Recoge la mierda del perro guarro! ¡Es más limpio el perro que tú!",
-                        "[Criticon]: ¡Córtate esas greñas melenudo! ¡A saber las pulgas que llevas ahí dentro!",
-                        "[Criticon]: ¡Ponte una falda más larga golfa! ¡Puedo verte la marca de las bragas desde aquí!"
-                    ]))
-            ],
-            Timing.Repeteable,
-            (postconditions, roles, map) => 
-                map.getUbication(roles.get("Criticon")).name === "Terraza"
-                && roles.get("Criticon").Characteristics.is("Residente")
-                && !roles.get("Criticon").Characteristics.is("Demente")
-                && roles.get("Criticon").Characteristics.is("Impedido")
-                && roles.get("Criticon").IsActive
-                && roles.get("Criticon").Aspect.sex === SexKind.Female,
-            (roles, map) => TruthTable.empty
-        ));
-
-        this._elements.push(new Interaction(
-            "CriticaBalconAuxiliar",
-            "[Criticon] critica a [Otro] por fumar",
-            new RolesDescriptor("Criticon", ["Otro"]),
-            [
-                new Phrase("Criticon")
-                    .withAlternative(roles => "[Criticon]: Ya vas a darle al vicio otra vez..."),
-                new Phrase("Otro", "Criticon")
-                    .withAlternative(roles => "[Otro]: Algo tendré que hacer para aguantaros a todos lo que queda de día [Criticon]."),
-                new Phrase("Criticon", "Otro")
-                    .withAlternative(
-                        roles => "[Criticon]: Lo que vas a aguantar es una enfermedad terminal, ¡viciosa!.",
-                        roles => new Effect("Otro", [EffectComponent.negative(EffectKind.Happiness, EffectStrength.Medium)])
-                    )
-            ],
-            Timing.Single,
-            (postconditions, roles, map) => 
-                map.getUbication(roles.get("Criticon")).name === "Terraza"
-                && map.areInTheSameLocation(roles.get("Criticon"), roles.get("Otro"))
-                && roles.get("Criticon").Characteristics.is("Residente")
-                && !roles.get("Criticon").Characteristics.is("Demente")
-                && roles.get("Criticon").Characteristics.is("Impedido")
-                && roles.get("Otro").Characteristics.is("Auxiliar")
-                && postconditions.exists(Sentence.build("Balcon"))
-                && roles.get("Criticon").IsActive
-                && roles.get("Criticon").Aspect.sex === SexKind.Female,
-            (roles, map) => TruthTable.empty
-        ));
 
         this._elements.push(new Interaction(
             "PicarLavabo",
@@ -1285,55 +1120,7 @@ export class InteractionRepository{
             (roles, map) => TruthTable.empty
         ));
 
-        this._elements.push(new Interaction(
-            "ResidenteDuerme",
-            "[Dormidor] se duerme",
-            new RolesDescriptor("Dormidor"),
-            [
-                new Phrase("Dormidor")
-                    .withAlternative(roles => roles.get("Dormidor").Aspect.sex === SexKind.Male 
-                        ? "[Dormidor] se queda dormido."
-                        : "[Dormidor] se queda dormida."
-                    )
-            ],
-            Timing.Repeteable,
-            (postconditions, roles, map) => 
-                map.getUbication(roles.get("Dormidor")).name === "Salon"
-                && roles.get("Dormidor").Characteristics.is("Residente")
-                && roles.get("Dormidor").IsActive
-                && postconditions.exists(Sentence.build("Medicado", roles.get("Dormidor").Individual.name))
-                && !postconditions.exists(Sentence.build("Descansado", roles.get("Dormidor").Individual.name)),
-            (roles, map) => {
-                roles.get("Dormidor").deactivate();
-                return TruthTable.empty;
-            }
-        ));
 
-        this._elements.push(new Interaction(
-            "ResidenteDespierta",
-            "[Dormidor] se despierta",
-            new RolesDescriptor("Dormidor"),
-            [
-                new Phrase("Dormidor")
-                    .withAlternative(roles => roles.get("Dormidor").Aspect.sex === SexKind.Male 
-                        ? randomFromList([
-                            "[Dormidor] se despierta sobresaltado, mirando alrededor.",
-                            "[Dormidor] se despierta taciturno."
-                         ])
-                        : "[Dormidor] se despierta tranquilamente."
-                    )
-            ],
-            Timing.Repeteable,
-            (postconditions, roles, map) => 
-                map.getUbication(roles.get("Dormidor")).name === "Salon"
-                && roles.get("Dormidor").Characteristics.is("Residente")
-                && !roles.get("Dormidor").IsActive,
-            (roles, map) => {
-                roles.get("Dormidor").activate();
-                return new TruthTable()
-                    .with(Sentence.build("Descansado", roles.get("Dormidor").Individual.name));
-            }
-        ));
 
         this._elements.push(new Interaction(
             "ComentarioPoliticoFavorableIzquierdas",
@@ -1678,134 +1465,6 @@ export class InteractionRepository{
                 roles.get("Recordador").dehumanize();
                 return new TruthTable()
                     .with(Sentence.build("Recuerdo", roles.get("Recordador").Individual.name));
-            }
-        ));
-
-        this._elements.push(new Interaction(
-            "RecuerdoFructuoso",
-            "Fructuoso recuerda un suceso de la guerra civil",
-            new RolesDescriptor("Recordador"),
-            [
-                new Phrase("Recordador")
-                    .withAlternative(roles => "[Recordador] se mira las manos aturdido. Lo que acaba de pasar le hace recordar una historia de hace mucho tiempo. Una historia que casi había olvidado."),
-                new Phrase("Recordador")
-                    .withAlternative(roles => "Fructuoso tiene el fusil en la mano. Está en la cima de una colina y delante suyo hay un muchacho lloroso y desnudo."),
-                new Phrase("Recordador")
-                    .withAlternative(roles => "Su cuerpo está lleno de heridas por las torturas que le han hecho los soldados."),
-                new Phrase("Recordador")
-                    .withAlternative(roles => "\"Mata al maricón este y vuelve al campamento cagando hostias\" dice el sargento detrás suyo. Oye como se marcha con los otros."),
-                new Phrase("Recordador")
-                    .withAlternative(roles => "Fructuoso tiene la misma sensación que cuando estuvo en ese instante y lugar. El mismo nudo en el estómago. El mismo vértigo de sentir estar a solo un paso de convertirse en un monstruo."),
-                new Phrase("Recordador")
-                    .withAlternative(roles => "El chico sigue balbuceando entre lloros \"No soy un invertido... lo juro, le digo la verdad\". Fructuoso mira el fusil y luego vuelve a mirar al chico."),
-                new Phrase("Recordador")
-                    .withAlternative(roles => "Entonces se enfoca en sus ojos vidriosos. El chico tiembla. Fructuoso también, nunca ha matado a nadie. Levanta el rifle y apunta a la cabeza del chico. Pone el dedo en el gatillo."),
-                new Phrase("Recordador")
-                    .withAlternative(
-                        roles => "Fructuoso dispara al chico en la cabeza",
-                        roles => Effect.null(),
-                        roles => Sentence.build("Malo", roles.get("Recordador").Individual.name)
-                    )
-                    .withAlternative(
-                        roles => "Fructuoso dispara al aire y le deja huir",
-                        roles => Effect.null(),
-                        roles => Sentence.build("Bueno", roles.get("Recordador").Individual.name)
-                    ),
-            ],
-            Timing.GlobalSingle,
-            (postconditions, roles, map) => 
-                map.getUbication(roles.get("Recordador")).name === "Salon"
-                && roles.get("Recordador").Name === "Fructuoso"
-                && roles.get("Recordador").IsActive
-                && postconditions.exists(Sentence.build("Agresor", roles.get("Recordador").Individual.name)),
-            (roles, map) => {
-                roles.get("Recordador").dehumanize();
-                return new TruthTable()
-                    .with(Sentence.build("Recuerdo", roles.get("Recordador").Individual.name));
-            }
-        ));
-
-        this._elements.push(new Interaction(
-            "Retiro",
-            "[Retirador] se retira a su cuarto",
-            new RolesDescriptor("Retirador", [ "Otro" ]),
-            [
-                new Phrase("Retirador")
-                    .withAlternative(roles => "[Retirador] sigue un poco aturdido después del vívido recuerdo."),
-                new Phrase("Retirador")
-                    .withAlternative(roles => "[Retirador]: yo... yo..."),
-                new Phrase("Otro", "Retirador")
-                    .withAlternative(roles => "[Otro]: ¿Se encuentra bien don [Retirador]?"),
-                new Phrase("Retirador")
-                    .withAlternative(roles => "[Retirador]: Sí... estoy bien. Gracias [Otro]. Creo que voy a descansar un poco al cuarto."),
-                new Phrase("Otro")
-                    .withAlternative(roles => "[Otro]: Como usted vea."),
-                new Phrase("Retirador")
-                    .withAlternative(roles => roles.get("Retirador").Characteristics.is("Impedido")
-                        ? "[Retirador] se marcha del salón por el ascensor, con semblante sombrío."
-                        : "[Retirador] se marcha del salón subiendo cabizbajo las escaleras.")
-            ],
-            Timing.GlobalSingle,
-            (postconditions, roles, map) => 
-                map.getUbication(roles.get("Retirador")).name === "Salon"
-                && roles.get("Retirador").IsActive
-                && postconditions.exists(Sentence.build("Recuerdo", roles.get("Retirador").Individual.name)),
-            (roles, map) => {
-                map.move(roles.get("Retirador"), map.getLocation("Limbo"));
-                return new TruthTable()
-                    .with(Sentence.build("Fin"));
-            }
-        ));
-
-        this._elements.push(new Interaction(
-            "ApagarTele",
-            "[Apagador] apaga la tele",
-            new RolesDescriptor("Apagador", [ "Ayudante" ]),
-            [
-                new Phrase("Apagador")
-                    .withAlternative(roles => "[Apagador]: Señoritos y señorita, hora de comer."),
-                new Phrase("Ayudante")
-                    .withAlternative(roles => "[Ayudante]: ¡Uy que tarde es! [Apagador] tiene razón, hay que ir tirando ya pa'l comedor."),
-                new Phrase("Apagador")
-                    .withAlternative(roles => "[Apagador] coge el mando del televisor y lo apaga.")
-            ],
-            Timing.GlobalSingle,
-            (postconditions, roles, map) => 
-                map.getUbication(roles.get("Apagador")).name === "Salon"
-                && map.areInTheSameLocation(roles.get("Apagador"), roles.get("Ayudante"))
-                && roles.get("Apagador").Characteristics.is("Auxiliar")
-                && roles.get("Ayudante").Characteristics.is("Auxiliar")
-                && roles.get("Apagador").IsActive
-                && roles.get("Ayudante").IsActive
-                && roles.get("Apagador").Happiness.isUnhappy
-                && roles.get("Ayudante").Happiness.isUnhappy
-                && postconditions.exists(Sentence.build("TelePolitica")),
-            (roles, map) => {
-                return new TruthTable()
-                    .with(Sentence.build("TeleApagada"))
-                    .with(Sentence.build("Comer"));
-            }
-        ));
-
-        this._elements.push(new Interaction(
-            "LlevarResidenteAComer",
-            "[Llevador] se lleva a [Llevado] al comedor",
-            new RolesDescriptor("Llevador", [ "Llevado" ]),
-            [
-                new Phrase("Llevador", "Llevado")
-                    .withAlternative(roles => "[Llevador] se lleva a [Llevado] al comedor.")
-            ],
-            Timing.Single,
-            (postconditions, roles, map) => 
-                map.getUbication(roles.get("Llevador")).name === "Salon"
-                && map.areInTheSameLocation(roles.get("Llevador"), roles.get("Llevado"))
-                && roles.get("Llevador").IsActive
-                && roles.get("Llevador").Characteristics.is("Auxiliar")
-                && roles.get("Llevado").Characteristics.is("Residente")
-                && postconditions.exists(Sentence.build("Comer")),
-            (roles, map) => {
-                map.move(roles.get("Llevado"), map.getLocation("Limbo"));
-                return TruthTable.empty;
             }
         ));
 

@@ -2,25 +2,29 @@ export class AlcoholismLevel {
     private readonly LOW_LEVEL = 2;
     private readonly MEDIUM_LEVEL = 4;
     
-    private level: number;
+    private _level: number;
 
     constructor(){
-        this.level = 0;
+        this._level = 0;
     }
 
-    public increaseLevel(): void {
-        this.level++;
+    increaseLevel(): void {
+        this._level++;
     }
 
-    public get isLow(): boolean {
-        return this.level < this.LOW_LEVEL;
+    get level(): number {
+        return this._level;
     }
 
-    public get isMedium(): boolean {
-        return this.level >= this.LOW_LEVEL && this.level < this.MEDIUM_LEVEL;
+    get isLow(): boolean {
+        return this._level < this.LOW_LEVEL;
     }
 
-    public get isHigh(): boolean {
-        return this.level >= this.MEDIUM_LEVEL;
+    get isMedium(): boolean {
+        return this._level >= this.LOW_LEVEL && this._level < this.MEDIUM_LEVEL;
+    }
+
+    get isHigh(): boolean {
+        return this._level >= this.MEDIUM_LEVEL;
     }
 }

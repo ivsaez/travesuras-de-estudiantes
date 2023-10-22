@@ -466,6 +466,26 @@ export class InteractionRepository{
         ));
 
         this._elements.push(new Interaction(
+            "SebasTajado",
+            "[Servidor] se sirve una copa",
+            new RolesDescriptor("Servidor"),
+            [
+                new Phrase("Servidor")
+                    .withAlternative(roles => "[Servidor] se sirve una copa mezclando Xibeca, Dyc y Malibú.")
+            ],
+            Timing.Repeteable,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("Ubicado"))
+                && roles.get("Servidor").IsActive
+                && roles.get("Servidor").Characteristics.is("Estudiante")
+                && roles.get("Servidor").Name === "Sebas"
+                && Alcoholic.is(roles.get("Servidor"))
+                && Alcoholic.to(roles.get("Servidor")).glass.isEmpty()
+                && postconditions.exists(Sentence.build("Botellas")),
+                (roles, map) => TruthTable.empty
+        ));
+
+        this._elements.push(new Interaction(
             "BeberTrago",
             "[Bebedor] bebe un trago de su vaso",
             new RolesDescriptor("Bebedor"),
@@ -635,7 +655,7 @@ export class InteractionRepository{
                             return "[Convencedor]: Siempre ha querido destruirte porque tiene envidia de ti [Manipulado]. Tienes todo lo que él nunca tendrá.";
 
                         if(roles.get("Manipulado").Name === "Susi")
-                            return "[Convencedor]: Te acusa de zorra pero fue él el que te frotó el paquete en el viaje de fin de curso. Es un puto cerdo [Susi].";
+                            return "[Convencedor]: Te acusa de zorra pero fue él el que te frotó el paquete en el viaje de fin de curso. Es un puto cerdo [Manipulado].";
                     },
                     roles => new Effect("Manipulado", [ 
                         EffectComponent.positive(EffectKind.Friend, EffectStrength.Medium),
@@ -655,6 +675,38 @@ export class InteractionRepository{
                 && roles.get("Convencedor").Characteristics.is("Estudiante"),
                 (roles, map) => new TruthTable()
                     .with(Sentence.build("Manipula", roles.get("Manipulador").Individual.name, roles.get("Manipulado").Individual.name, true))
+        ));
+
+        this._elements.push(new Interaction(
+            "PrimeraHostia",
+            "[Hostiador] le suelta una hotia a [Hostiado]",
+            new RolesDescriptor("Hostiador", [ "Hostiado" ]),
+            [
+                new Phrase("Hostiador")
+                    .withAlternative(roles => "[Hostiador]: A tomar por culo, ¡te reviento!"),
+                new Phrase("Hostiador", "Hostiado")
+                    .withAlternative(roles => "[Hostiador] le da un sonoro puñetazo en el estómago a [Hostiado].",
+                    roles => new Effect("Hostiado", [
+                        EffectComponent.negative(EffectKind.Friend, EffectStrength.Medium),
+                        EffectComponent.negative(EffectKind.Happiness, EffectStrength.Medium)
+                    ])),
+                new Phrase("Hostiado")
+                    .withAlternative(roles => "[Hostiado]: ¿Pero qué?...¡Aaargh!"),
+            ],
+            Timing.GlobalSingle,
+            (postconditions, roles, map) => 
+                //postconditions.elements.filter(x => x.function.name === "Manipula").length >= 4
+                //&& postconditions.elements.filter(x => x.function.name === "Amenaza").length >= 4
+                roles.get("Hostiador").IsActive
+                && Alcoholic.is(roles.get("Hostiador"))
+                && Alcoholic.to(roles.get("Hostiador")).alcoholism.isMedium
+                && roles.get("Hostiador").Aspect.sex === SexKind.Male
+                && roles.get("Hostiador").Characteristics.is("Estudiante")
+                && roles.get("Hostiado").IsActive
+                && roles.get("Hostiado").Characteristics.is("Profesor")
+                && !postconditions.exists(Sentence.build("PrimeraHostia")),
+                (roles, map) => new TruthTable()
+                    .with(Sentence.build("PrimeraHostia"))
         ));
 
         /*

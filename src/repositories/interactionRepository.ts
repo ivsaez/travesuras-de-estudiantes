@@ -605,7 +605,8 @@ export class InteractionRepository{
                 && roles.get("Amenazador").IsActive
                 && roles.get("Amenazador").Characteristics.is("Profesor")
                 && roles.get("Amenazado").IsActive
-                && roles.get("Amenazado").Characteristics.is("Estudiante"),
+                && roles.get("Amenazado").Characteristics.is("Estudiante")
+                && !postconditions.exists(Sentence.build("PrimeraHostia")),
                 (roles, map) => new TruthTable()
                     .with(Sentence.build("Amenaza", roles.get("Amenazador").Individual.name, roles.get("Amenazado").Individual.name, true))
         ));
@@ -672,7 +673,8 @@ export class InteractionRepository{
                 && roles.get("Manipulado").IsActive
                 && roles.get("Manipulado").Characteristics.is("Estudiante")
                 && roles.get("Convencedor").IsActive
-                && roles.get("Convencedor").Characteristics.is("Estudiante"),
+                && roles.get("Convencedor").Characteristics.is("Estudiante")
+                && !postconditions.exists(Sentence.build("PrimeraHostia")),
                 (roles, map) => new TruthTable()
                     .with(Sentence.build("Manipula", roles.get("Manipulador").Individual.name, roles.get("Manipulado").Individual.name, true))
         ));

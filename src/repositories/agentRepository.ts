@@ -3,6 +3,7 @@ import { Aspect, Likes, SexKind, OriginKind, EyeColor, HairColor, HaircutStyle, 
 import { RelationSet, RelationFactory, RelationKind, Familiar } from "npc-relations";
 import { Happiness, Personality } from "npc-mind";
 import { Alcoholic } from "../models/Alcoholic";
+import { Clothed } from "../models/Clothed";
 
 export class AgentRepository{
     private _elements: Agent[];
@@ -10,7 +11,7 @@ export class AgentRepository{
     constructor(){
         this._elements = [];
 
-        this._elements.push(new Agent(
+        this._elements.push(new Clothed(
             "Paco",
             new Aspect(
                 SexKind.Male, 

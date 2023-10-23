@@ -3,12 +3,13 @@ import { Clothing } from "./Clothing";
 import { Aspect, Likes } from "npc-aspect";
 import { RelationSet } from "npc-relations";
 import { Happiness, Personality } from "npc-mind";
+import { Lifed } from "./Lifed";
 
 export interface IClothed{
     clothing: Clothing;
 }
 
-export class Clothed extends Agent implements IClothed {
+export class Clothed extends Lifed implements IClothed {
     private _clothing: Clothing;
 
     constructor(

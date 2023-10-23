@@ -11,6 +11,7 @@ import { Effect, EffectComponent, EffectKind, EffectStrength } from "npc-emotion
 import { randomFromList, check } from "role-methods";
 import { Alcoholic } from "../models/Alcoholic";
 import { Clothed } from "../models/Clothed";
+import { Lifed } from "../models/Lifed";
 
 export class InteractionRepository{
     private _elements: IInteraction[];
@@ -706,9 +707,11 @@ export class InteractionRepository{
                 && roles.get("Hostiador").Aspect.sex === SexKind.Male
                 && roles.get("Hostiador").Characteristics.is("Estudiante")
                 && roles.get("Hostiado").IsActive
+                && Lifed.is(roles.get("Hostiado"))
                 && roles.get("Hostiado").Characteristics.is("Profesor")
                 && !postconditions.exists(Sentence.build("PrimeraHostia")),
                 (roles, map) => {
+                    Lifed.to(roles.get("Hostiado")).hitSoft();
                     return new TruthTable()
                         .with(Sentence.build("PrimeraHostia"));
                 }

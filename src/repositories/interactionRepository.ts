@@ -718,6 +718,48 @@ export class InteractionRepository{
         ));
 
         this._elements.push(new Interaction(
+            "HostiaBasica",
+            "[Hostiador] le suelta una hotia a [Hostiado]",
+            new RolesDescriptor("Hostiador", [ "Hostiado" ]),
+            [
+                new Phrase("Hostiador")
+                    .withAlternative(roles => roles.get("Hostiador").Aspect.sex === SexKind.Male
+                        ? randomFromList([
+                            "[Hostiador] le da un puñetazo en la cara a [Hostiado].",
+                            "[Hostiador] le suelta un codazo en la cabeza a [Hostiado].",
+                            "[Hostiador] le da una patada en el estómago a [Hostiado].",
+                        ])
+                        : randomFromList([
+                            "[Hostiador] le da una bofetada a [Hostiado].",
+                            "[Hostiador] le da un tirón de pelos [Hostiado].",
+                            "[Hostiador] le da una patada en la espinilla a [Hostiado].",
+                        ])),
+                new Phrase("Hostiado")
+                    .withAlternative(roles => randomFromList([
+                        "[Hostiado]: ¿Eso es todo lo que tienes?",
+                        "[Hostiado]: ¡Nenaza!",
+                        "[Hostiado]: ¿Esa es toda la fuerza que tienes?",
+                        "[Hostiado]: ¡No sabes pegar!",
+                    ])),
+            ],
+            Timing.Repeteable,
+            (postconditions, roles, map) =>
+                // check(roles.get("Hostiador").Personality.pacificViolent) 
+                roles.get("Hostiador").IsActive
+                && Alcoholic.is(roles.get("Hostiador"))
+                && Alcoholic.to(roles.get("Hostiador")).alcoholism.isMedium
+                && roles.get("Hostiador").Characteristics.is("Estudiante")
+                && roles.get("Hostiado").IsActive
+                && Lifed.is(roles.get("Hostiado"))
+                && roles.get("Hostiado").Characteristics.is("Profesor")
+                && postconditions.exists(Sentence.build("PrimeraHostia")),
+                (roles, map) => {
+                    Lifed.to(roles.get("Hostiado")).hitSoft();
+                    return TruthTable.empty;
+                }
+        ));
+
+        this._elements.push(new Interaction(
             "DesnudarArriba",
             "[Desnudador] propone desnudar a [Victima]",
             new RolesDescriptor("Desnudador", [ "Victima", "Complice" ]),
@@ -760,6 +802,52 @@ export class InteractionRepository{
                 && !postconditions.exists(Sentence.build("DesnudoArriba", roles.get("Victima").Individual.name)),
                 (roles, map) => new TruthTable()
                     .with(Sentence.build("DesnudoArriba", roles.get("Victima").Individual.name))
+        ));
+
+        this._elements.push(new Interaction(
+            "DesnudarAbajo",
+            "[Desnudador] propone desnudar de cintura pra abajo a [Victima]",
+            new RolesDescriptor("Desnudador", [ "Victima", "Complice" ]),
+            [
+                new Phrase("Desnudador")
+                    .withAlternative(roles => "[Desnudador]: Vamos a quitale también los pantalones. ¡A ver lo pequeña que la tiene!"),
+                new Phrase("Complice", "Desnudador")
+                    .withAlternative(roles => "[Complice]: No pienso hacer eso.")
+                    .withAlternative(
+                        roles => "[Complice]: ¡Sí joder! ¡Vamos a ver esa pichurrilla arrugada!",
+                        roles => Effect.null(),
+                        roles => {
+                            Clothed.to(roles.get("Victima")).clothing.removeBottom();
+                            return Sentence.build("DesnudoAbajo", roles.get("Victima").Individual.name);
+                        }),
+                new Phrase("Desnudador", "Complice")
+                    .withAlternative(roles => Clothed.to(roles.get("Victima")).clothing.bottomNaked
+                        ? "[Desnudador] y [Complice] estiran de los pantalones de [Victima] hasta quitárselos. Luego le arrancan también los calzoncillos."
+                        : "[Desnudador] y [Complice] se miran sin saber qué hacer."),
+                new Phrase("Victima")
+                    .withAlternative(roles => Clothed.to(roles.get("Victima")).clothing.bottomNaked
+                        ? "[Victima]: ¡Mierda! ¡Putos guarros! ¡La madre que os parió!"
+                        : "[Victima]: Ni se os pase por la cabeza."),
+            ],
+            Timing.Single,
+            (postconditions, roles, map) => 
+                roles.get("Desnudador").IsActive
+                && Alcoholic.is(roles.get("Desnudador"))
+                && Alcoholic.to(roles.get("Desnudador")).alcoholism.isMedium
+                && roles.get("Desnudador").Aspect.sex === SexKind.Male
+                && roles.get("Desnudador").Characteristics.is("Estudiante")
+                && roles.get("Complice").IsActive
+                && Alcoholic.is(roles.get("Complice"))
+                && Alcoholic.to(roles.get("Complice")).alcoholism.isMedium
+                && roles.get("Complice").Characteristics.is("Estudiante")
+                && roles.get("Victima").IsActive
+                && Clothed.is(roles.get("Victima"))
+                && Clothed.to(roles.get("Victima")).clothing.topNaked
+                && !Clothed.to(roles.get("Victima")).clothing.bottomNaked
+                && roles.get("Victima").Characteristics.is("Profesor")
+                && !postconditions.exists(Sentence.build("DesnudoAbajo", roles.get("Victima").Individual.name)),
+                (roles, map) => new TruthTable()
+                    .with(Sentence.build("DesnudoAbajo", roles.get("Victima").Individual.name))
         ));
 
         /*

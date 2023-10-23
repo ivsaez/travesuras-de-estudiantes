@@ -27,20 +27,28 @@ export class Lifed extends Agent implements ILifed{
         this._life = new Life();
     }
 
-    public get dead(): boolean {
+    get dead(): boolean {
         return this._life.isDead;
     }
 
-    public hitSoft(): void {
+    hitSoft(): void {
         this._life.hit(5);
+        this.checkAlive();
     }
 
-    public hitHard(): void {
+    hitHard(): void {
         this._life.hit(10);
+        this.checkAlive();
     }
 
-    public hitExtrreme(): void {
+    hitExtrreme(): void {
         this._life.hit(50);
+        this.checkAlive();
+    }
+
+    private checkAlive(): void {
+        if(this._life.isDead)
+            this.deactivate();
     }
 
     public static is(agent: Agent): agent is Lifed {

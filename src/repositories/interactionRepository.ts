@@ -923,6 +923,28 @@ export class InteractionRepository{
                 return TruthTable.empty;
             }
         ));
+
+        this._elements.push(new Interaction(
+            "AmenazaDesesperada",
+            "[Amenazador] amenaza desesperadamente",
+            new RolesDescriptor("Amenazador"),
+            [
+                new Phrase("Amenazador")
+                    .withAlternative(roles => randomFromList([
+                        "[Amenazador]: ¡Os voy a denunciar a todos!",
+                        "[Amenazador]: ¡Os voy a arruinar la puta vida después de esto!",
+                        "[Amenazador]: ¡Sois carne de reformatorio cabrones!",
+                        "[Amenazador]: ¡Pagaréis cada hostia! ¡Lo juro!",
+                        "[Amenazador]: ¡Me cago en la madre que os parió!",
+                    ]))
+            ],
+            Timing.Repeteable,
+            (postconditions, roles, map) => 
+                roles.get("Amenazador").IsActive
+                && roles.get("Amenazador").Characteristics.is("Profesor")
+                && postconditions.exists(Sentence.build("PrimeraHostia")),
+            (roles, map) => TruthTable.empty
+        ));
         
         /*
         this._elements.push(new Interaction(

@@ -12,6 +12,7 @@ import { randomFromList, check } from "role-methods";
 import { Alcoholic } from "../models/Alcoholic";
 import { Clothed } from "../models/Clothed";
 import { Lifed } from "../models/Lifed";
+import { Concienced } from "../models/Concienced";
 
 export class InteractionRepository{
     private _elements: IInteraction[];
@@ -464,7 +465,10 @@ export class InteractionRepository{
                 && Alcoholic.to(roles.get("Servido")).glass.isEmpty()
                 && postconditions.exists(Sentence.build("Botellas"))
                 && postconditions.exists(Sentence.build("Saludo", roles.get("Servidor").Individual.name, roles.get("Servido").Individual.name, true)),
-                (roles, map) => TruthTable.empty
+                (roles, map) => {
+                    Alcoholic.to(roles.get("Servido")).glass.fill();
+                    return TruthTable.empty;
+                }
         ));
 
         this._elements.push(new Interaction(
@@ -850,6 +854,76 @@ export class InteractionRepository{
                     .with(Sentence.build("DesnudoAbajo", roles.get("Victima").Individual.name))
         ));
 
+        this._elements.push(new Interaction(
+            "PedirCalma",
+            "[Calmador] pide calma",
+            new RolesDescriptor("Calmador", [ "Concienciado", "Victima" ]),
+            [
+                new Phrase("Calmador")
+                    .withAlternative(roles => randomFromList([
+                        "[Calmador]: Vamos a calmarnos todos un poco.",
+                        "[Calmador]: Creo que nos estamos alterando demasiado.",
+                        "[Calmador]: No perdamos la cabeza.",
+                    ])),
+                new Phrase("Concienciado")
+                    .withAlternative(roles => "[Concienciado] mira al suelo. Su cara refleja un mar de dudas."),
+                new Phrase("Victima")
+                    .withAlternative(roles => "[Victima]: Haced caso a Maria. Es la única de vosotros que tiene media neurona.")
+            ],
+            Timing.Repeteable,
+            (postconditions, roles, map) => 
+                roles.get("Calmador").IsActive
+                && Alcoholic.is(roles.get("Calmador"))
+                && Alcoholic.to(roles.get("Calmador")).alcoholism.isLow
+                && roles.get("Calmador").Name === "Mari"
+                && roles.get("Calmador").Characteristics.is("Estudiante")
+                && roles.get("Concienciado").IsActive
+                && Concienced.is(roles.get("Concienciado"))
+                && roles.get("Concienciado").Characteristics.is("Estudiante")
+                && roles.get("Victima").IsActive
+                && roles.get("Victima").Characteristics.is("Profesor")
+                && postconditions.exists(Sentence.build("PrimeraHostia")),
+            (roles, map) => {
+                Concienced.to(roles.get("Concienciado")).concience.increse();
+                return TruthTable.empty;
+            }
+        ));
+
+        this._elements.push(new Interaction(
+            "AlentarViolencia",
+            "[Alentador] pide más violencia",
+            new RolesDescriptor("Alentador", [ "Concienciado", "Victima" ]),
+            [
+                new Phrase("Alentador")
+                    .withAlternative(roles => randomFromList([
+                        "[Alentador]: Me aburroooo. ¿Vamos a darle mas caña al viejo o qué?",
+                        "[Alentador]: Lo veo todavía muy chulito. Un par de hostias no le vendrían mal.",
+                        "[Alentador]: Paco se está relajando demasiado. Creo que le pegamos muy poco.",
+                    ])),
+                new Phrase("Concienciado")
+                    .withAlternative(roles => "[Concienciado] sonrie con alivio. Las dudas se disipan en su rostro."),
+                new Phrase("Victima")
+                    .withAlternative(roles => "[Victima]: ¡Cállate la puta boca niñata!")
+            ],
+            Timing.Repeteable,
+            (postconditions, roles, map) => 
+                roles.get("Alentador").IsActive
+                && Alcoholic.is(roles.get("Alentador"))
+                && Alcoholic.to(roles.get("Alentador")).alcoholism.isLow
+                && roles.get("Alentador").Name === "Mari"
+                && roles.get("Alentador").Characteristics.is("Estudiante")
+                && roles.get("Concienciado").IsActive
+                && Concienced.is(roles.get("Concienciado"))
+                && roles.get("Concienciado").Characteristics.is("Estudiante")
+                && roles.get("Victima").IsActive
+                && roles.get("Victima").Characteristics.is("Profesor")
+                && postconditions.exists(Sentence.build("PrimeraHostia")),
+            (roles, map) => {
+                Concienced.to(roles.get("Concienciado")).concience.decrese();
+                return TruthTable.empty;
+            }
+        ));
+        
         /*
         this._elements.push(new Interaction(
             "IrBalcon",

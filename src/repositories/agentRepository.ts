@@ -4,6 +4,7 @@ import { RelationSet, RelationFactory, RelationKind, Familiar } from "npc-relati
 import { Happiness, Personality } from "npc-mind";
 import { Alcoholic } from "../models/Alcoholic";
 import { Clothed } from "../models/Clothed";
+import { Concienced } from "../models/Concienced";
 
 export class AgentRepository{
     private _elements: Agent[];
@@ -59,7 +60,7 @@ export class AgentRepository{
             false
         ));
 
-        this._elements.push(new Alcoholic(
+        this._elements.push(new Concienced(
             "Susi",
             new Aspect(
                 SexKind.Female, 

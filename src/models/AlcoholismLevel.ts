@@ -12,6 +12,10 @@ export class AlcoholismLevel {
         this._level++;
     }
 
+    reset(): void {
+        this._level = 0;
+    }
+
     get level(): number {
         return this._level;
     }

@@ -8,6 +8,7 @@ export class Functions{
         new Function("Ubicado", Cardinality.None),
         new Function("PrimeraHostia", Cardinality.None),
         new Function("SugerenciaRajar", Cardinality.None),
+        new Function("Potado", Cardinality.None),
         new Function("Desenmascarado", Cardinality.One),
         new Function("Estudiante", Cardinality.One),
         new Function("Profesor", Cardinality.One),

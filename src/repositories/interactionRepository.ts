@@ -1021,32 +1021,6 @@ export class InteractionRepository{
         ));
 
         this._elements.push(new Interaction(
-            "SugerenciaRajar",
-            "[Sugeridor] sugiere rajar al profesor",
-            new RolesDescriptor("Sugeridor", [ "Victima" ]),
-            [
-                new Phrase("Sugeridor")
-                    .withAlternative(roles => "[Sugeridor]: ¿Sabéis qué estoy pensando? Pienso que podríamos rajarlo como a un cerdo.",
-                    roles => new Effect("Victima", [
-                        EffectComponent.negative(EffectKind.Happiness, EffectStrength.Medium)
-                    ])),
-            ],
-            Timing.GlobalSingle,
-            (postconditions, roles, map) =>
-                roles.get("Sugeridor").IsActive
-                && roles.get("Sugeridor").Characteristics.is("Estudiante")
-                && Alcoholic.is(roles.get("Sugeridor"))
-                && Alcoholic.to(roles.get("Sugeridor")).alcoholism.isHigh
-                && map.getUbication(roles.get("Sugeridor")).name === "Sotano"
-                && roles.get("Victima").IsActive
-                && roles.get("Victima").Characteristics.is("Profesor")
-                && postconditions.exists(Sentence.build("PrimeraHostia"))
-                && !postconditions.exists(Sentence.build("SugerenciaRajar")),
-            (roles, map) => new TruthTable()
-                .with(Sentence.build("SugerenciaRajar"))
-        ));
-
-        this._elements.push(new Interaction(
             "IrFuera",
             "[Desplazado] sale fuera",
             new RolesDescriptor("Desplazado"),
@@ -1066,6 +1040,7 @@ export class InteractionRepository{
                 && roles.get("Desplazado").Characteristics.is("Estudiante")
                 && map.getUbication(roles.get("Desplazado")).name === "Sotano"
                 && roles.get("Desplazado").Happiness.isUnhappy
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Estudiante")).length > 1
                 && postconditions.exists(Sentence.build("PrimeraHostia")),
             (roles, map) => 
             {
@@ -1137,13 +1112,9 @@ export class InteractionRepository{
                 && map.getUbication(roles.get("Vomitador")).name === "Fuera"
                 && roles.get("Vomitador").Aspect.sex === SexKind.Female
                 && Alcoholic.is(roles.get("Vomitador"))
-                && Alcoholic.to(roles.get("Vomitador")).alcoholism.isHigh,
-            (roles, map) => 
-            {
-                Alcoholic.to(roles.get("Vomitador")).alcoholism.reset();
-                return new TruthTable()
-                    .with(Sentence.build("Potado"));
-            },
+                && Alcoholic.to(roles.get("Vomitador")).alcoholism.isMedium,
+            (roles, map) => new TruthTable()
+                .with(Sentence.build("Potado")),
         ));
 
         this._elements.push(new Interaction(
@@ -1249,10 +1220,15 @@ export class InteractionRepository{
         this._elements.push(new Interaction(
             "PrimeraRajada",
             "[Rajador] raja por primera vez a [Rajado]",
-            new RolesDescriptor("Rajador", [ "Rajado" ]),
+            new RolesDescriptor("Sugeridor", [ "Rajador", "Rajado" ]),
             [
+                new Phrase("Sugeridor")
+                    .withAlternative(roles => "[Sugeridor]: ¿Sabéis qué estoy pensando? Pienso que podríamos rajarlo como a un cerdo.",
+                    roles => new Effect("Rajado", [
+                        EffectComponent.negative(EffectKind.Happiness, EffectStrength.Medium)
+                    ])),
                 new Phrase("Rajador")
-                    .withAlternative(roles => "[Rajador]: A ver si después de esto sigues siendo tan chulo."),
+                    .withAlternative(roles => "[Rajador]: ¡Buena idea! A ver si después de esto sigues siendo tan chulo."),
                 new Phrase("Rajador", "Rajado")
                     .withAlternative(roles => "[Rajador] le hace un corte en el antebrazo [Rajado] con una navaja.",
                     roles => new Effect("Rajado", [
@@ -1270,10 +1246,15 @@ export class InteractionRepository{
                 && roles.get("Rajador").Aspect.sex === SexKind.Male
                 && roles.get("Rajador").Characteristics.is("Estudiante")
                 && map.getUbication(roles.get("Rajador")).name === "Sotano"
+                && roles.get("Sugeridor").IsActive
+                && roles.get("Sugeridor").Characteristics.is("Estudiante")
+                && Alcoholic.is(roles.get("Sugeridor"))
+                && (Alcoholic.to(roles.get("Sugeridor")).alcoholism.isMedium || Alcoholic.to(roles.get("Sugeridor")).alcoholism.isHigh)
+                && map.getUbication(roles.get("Sugeridor")).name === "Sotano"
                 && roles.get("Rajado").IsActive
                 && Lifed.is(roles.get("Rajado"))
                 && roles.get("Rajado").Characteristics.is("Profesor")
-                && postconditions.exists(Sentence.build("SugerenciaRajar"))
+                && postconditions.exists(Sentence.build("PrimeraHostia"))
                 && !postconditions.exists(Sentence.build("PrimeraRajada")),
                 (roles, map) => {
                     Lifed.to(roles.get("Rajado")).hitHard();

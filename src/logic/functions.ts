@@ -9,6 +9,7 @@ export class Functions{
         new Function("PrimeraHostia", Cardinality.None),
         new Function("PrimeraRajada", Cardinality.None),
         new Function("Potado", Cardinality.None),
+        new Function("Cagada", Cardinality.None),
         new Function("Desenmascarado", Cardinality.One),
         new Function("Estudiante", Cardinality.One),
         new Function("Profesor", Cardinality.One),

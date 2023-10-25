@@ -8,7 +8,7 @@ export interface ILifed{
     dead: boolean;
     hitSoft();
     hitHard();
-    hitExtrreme();
+    hitExtreme();
 }
 
 export class Lifed extends Agent implements ILifed{
@@ -41,7 +41,7 @@ export class Lifed extends Agent implements ILifed{
         this.checkAlive();
     }
 
-    hitExtrreme(): void {
+    hitExtreme(): void {
         this._life.hit(50);
         this.checkAlive();
     }

@@ -19,6 +19,8 @@ export class LocationRepository{
         Location.join(sotano, fuera);
         Location.join(sotano, limbo);
         Location.join(fuera, comisaria);
+        Location.join(sotano, comisaria);
+        Location.join(limbo, comisaria);
     }
 
     get all(){

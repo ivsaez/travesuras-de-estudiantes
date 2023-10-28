@@ -131,6 +131,48 @@ export class AgentRepository{
             [ "Estudiante" ],
             false
         ));
+
+        this._elements.push(new Agent(
+            "Eladio",
+            new Aspect(
+                SexKind.Male, 
+                OriginKind.European, 
+                EyeColor.Brown, 
+                HairColor.Black, 
+                HaircutStyle.Short, 
+                ComplexionKind.Athletic, 
+                SpecieKind.Human, 
+                185, 
+                38),
+            new RelationSet()
+                .append("Almudena", RelationFactory.get(RelationKind.Friend)),
+            new Happiness(),
+            new Personality(50, 50, 30, 50, 50),
+            Likes.likesSpecieAndSex(SpecieKind.Human, SexKind.Female),
+            [ "Policia" ],
+            false
+        ));
+
+        this._elements.push(new Agent(
+            "Almudena",
+            new Aspect(
+                SexKind.Female, 
+                OriginKind.European, 
+                EyeColor.Black, 
+                HairColor.Black, 
+                HaircutStyle.Short, 
+                ComplexionKind.Thin, 
+                SpecieKind.Human, 
+                170, 
+                33),
+            new RelationSet()
+                .append("Eladio", RelationFactory.get(RelationKind.Friend)),
+            new Happiness(0),
+            new Personality(50, 50, 60, 50, 50),
+            Likes.likesSpecieAndSex(SpecieKind.Human, SexKind.Male),
+            [ "Policia" ],
+            false
+        ));
     }
 
     get all(){

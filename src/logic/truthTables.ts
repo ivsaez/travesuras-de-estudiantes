@@ -27,6 +27,10 @@ export class Tables{
             .with(Sentence.build("Estudiante", "Mari"))
             .with(Sentence.build("Estudiante", "Susi"))
             .with(Sentence.build("Profesor", "Paco"))],
+        ["Eladio", new TruthTable()
+            .with(Sentence.build("Policia", "Almudena"))],
+        ["Almudena", new TruthTable()
+            .with(Sentence.build("Policia", "Eladio"))],
     ]);
     
     static tableFrom(actorName: string): TruthTable{

@@ -1686,7 +1686,7 @@ export class InteractionRepository{
 
         this._elements.push(new Interaction(
             "Arrepentida",
-            "[Arrepentido] se arrepiente",
+            "[Arrepentido] le cuenta a [Critico] que se arrepiente",
             new RolesDescriptor("Arrepentido", [ "Critico" ]),
             [
                 new Phrase("Arrepentido")
@@ -1716,7 +1716,7 @@ export class InteractionRepository{
 
         this._elements.push(new Interaction(
             "Apenarse",
-            "[Apenado] siente pena por el profesor",
+            "[Apenado] le cuenta a [Critico] que siente pena por el profesor",
             new RolesDescriptor("Apenado", [ "Critico" ]),
             [
                 new Phrase("Apenado")
@@ -1740,7 +1740,7 @@ export class InteractionRepository{
 
         this._elements.push(new Interaction(
             "Vanagloriar",
-            "[Vanagloriado] se arrepiente",
+            "[Vanagloriado] se vanagloria",
             new RolesDescriptor("Vanagloriado"),
             [
                 new Phrase("Vanagloriado")

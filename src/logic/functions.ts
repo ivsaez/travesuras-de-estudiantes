@@ -19,6 +19,8 @@ export class Functions{
         new Function("DesnudoArriba", Cardinality.One),
         new Function("DesnudoAbajo", Cardinality.One),
         new Function("Policia", Cardinality.One),
+        new Function("Rendido", Cardinality.One),
+        new Function("Desafio", Cardinality.One),
         new Function("Saludo", Cardinality.Two, "x", "y", true),
         new Function("Pareja", Cardinality.Two, "x", "y", true),
         new Function("Amenaza", Cardinality.Two, "x", "y", true),

@@ -781,8 +781,6 @@ export class InteractionRepository{
             ],
             Timing.GlobalSingle,
             (postconditions, roles, map) => 
-                //postconditions.elements.filter(x => x.function.name === "Manipula").length >= 4
-                //&& postconditions.elements.filter(x => x.function.name === "Amenaza").length >= 4
                 roles.get("Hostiador").IsActive
                 && Alcoholic.is(roles.get("Hostiador"))
                 && Alcoholic.to(roles.get("Hostiador")).alcoholism.isMedium
@@ -802,7 +800,7 @@ export class InteractionRepository{
 
         this._elements.push(new Interaction(
             "HostiaBasica",
-            "[Hostiador] le suelta una hotia a [Hostiado]",
+            "[Hostiador] le suelta una hostia a [Hostiado]",
             new RolesDescriptor("Hostiador", [ "Hostiado" ]),
             [
                 new Phrase("Hostiador")
@@ -1127,6 +1125,7 @@ export class InteractionRepository{
                         && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Estudiante")).length > 1
                         && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length === 0
                         && postconditions.exists(Sentence.build("PrimeraHostia"))
+                        && !postconditions.exists(Sentence.build("LlamadaPolicia"))
                         && !postconditions.exists(Sentence.build("Muerto"))
                 },
             (roles, map) => 
@@ -1705,6 +1704,31 @@ export class InteractionRepository{
         ));
 
         this._elements.push(new Interaction(
+            "PoliciasCadaver",
+            "Los policías ven el cadáver",
+            new RolesDescriptor("PrimerOficial", [ "SegundoOficial", "Muerto" ]),
+            [
+                new Phrase("PrimerOficial", "SegundoOficial")
+                    .withAlternative(roles => "[PrimerOficial]: Hostia puta [SegundoOficial], el pavo de la silla está fiambre."),
+                new Phrase("SegundoOficial")
+                    .withAlternative(roles => "[SegundoOficial]: Joder, como está la chavalada de hoy en día."),
+            ],
+            Timing.GlobalSingle,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("LlamadaPolicia"))
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length > 0
+                && roles.get("PrimerOficial").IsActive
+                && roles.get("PrimerOficial").Characteristics.is("Policia")
+                && map.getUbication(roles.get("PrimerOficial")).name === "Sotano"
+                && roles.get("SegundoOficial").IsActive
+                && roles.get("SegundoOficial").Characteristics.is("Policia")
+                && map.getUbication(roles.get("SegundoOficial")).name === "Sotano"
+                && !roles.get("Muerto").IsActive
+                && roles.get("Muerto").Characteristics.is("Profesor"),
+            (roles, map) => TruthTable.empty
+        ));
+
+        this._elements.push(new Interaction(
             "AcusarTraicion",
             "[Acusador] acusa e traición",
             new RolesDescriptor("Acusador", [ "Acusado" ]),
@@ -1811,6 +1835,139 @@ export class InteractionRepository{
                 && roles.get("Pedidor").Aspect.sex === SexKind.Female
                 && map.getUbication(roles.get("Pedidor")).name === "Sotano",
             (roles, map) => TruthTable.empty
+        ));
+
+        this._elements.push(new Interaction(
+            "Rendirse",
+            "[Rendido] se rinde a [Poli]",
+            new RolesDescriptor("Rendido", [ "Poli" ]),
+            [
+                new Phrase("Rendido")
+                    .withAlternative(roles => roles.get("Rendido").Aspect.sex === SexKind.Male
+                        ? randomFromList([
+                            "[Rendido]: Me rindo, qué cojones.",
+                            "[Rendido]: Aquí ya no hay nada que hacer. Me rindo.",
+                            "[Rendido]: Puta vida, me rindo.",
+                        ])
+                        : randomFromList([
+                            "[Rendido]: Me rindo agentes. No quiero morir.",
+                            "[Rendido]: Soy demasiado joven para morir, me rindo.",
+                            "[Rendido]: No me haga daño agente, me rindo.",
+                        ])),
+                new Phrase("Poli")
+                    .withAlternative(roles => randomFromList([
+                        "[Poli]: Haces lo correcto.",
+                        "[Poli]: Sabia decisión.",
+                        "[Poli]: Esa es la actitud.",
+                    ])),
+            ],
+            Timing.Single,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("LlamadaPolicia"))
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length > 0
+                && roles.get("Rendido").IsActive
+                && roles.get("Rendido").Characteristics.is("Estudiante")
+                && map.getUbication(roles.get("Rendido")).name === "Sotano"
+                && roles.get("Poli").IsActive
+                && roles.get("Poli").Characteristics.is("Policia")
+                && map.getUbication(roles.get("Poli")).name === "Sotano"
+                && !postconditions.exists(Sentence.build("Rendido", roles.get("Rendido").Individual.name))
+                && !postconditions.exists(Sentence.build("Desafio", roles.get("Rendido").Individual.name)),
+            (roles, map) => new TruthTable()
+                .with(Sentence.build("Rendido", roles.get("Rendido").Individual.name))
+        ));
+
+        this._elements.push(new Interaction(
+            "Desafiar",
+            "[Desafiador] desafía a la policia",
+            new RolesDescriptor("Desafiador", [ "Sorprendido" ]),
+            [
+                new Phrase("Desafiador")
+                    .withAlternative(roles => randomFromList([
+                        "[Desafiador]: ¡A tomar por culo! ¡Yo no me rindo joder!",
+                        "[Desafiador]: ¡Putos maderos de mierda! ¡Que os follen!",
+                        "[Desafiador]: ¡Me cago en la poli y en la ley!",
+                    ])),
+                new Phrase("Sorprendido")
+                    .withAlternative(roles => randomFromList([
+                        "[Sorprendido]: ¡Estás loco!",
+                        "[Sorprendido]: ¡Se te va la olla!",
+                        "[Sorprendido]: ¡Pero ríndete pavo!",
+                    ])),
+            ],
+            Timing.Single,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("LlamadaPolicia"))
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length > 0
+                && roles.get("Desafiador").IsActive
+                && roles.get("Desafiador").Characteristics.is("Estudiante")
+                && roles.get("Desafiador").Aspect.sex === SexKind.Male
+                && map.getUbication(roles.get("Desafiador")).name === "Sotano"
+                && roles.get("Sorprendido").IsActive
+                && roles.get("Sorprendido").Characteristics.is("Estudiante")
+                && roles.get("Sorprendido").Aspect.sex === SexKind.Female
+                && map.getUbication(roles.get("Sorprendido")).name === "Sotano"
+                && !postconditions.exists(Sentence.build("Rendido", roles.get("Desafiador").Individual.name))
+                && !postconditions.exists(Sentence.build("Desafio", roles.get("Desafiador").Individual.name)),
+            (roles, map) => new TruthTable()
+                .with(Sentence.build("Desafio", roles.get("Desafiador").Individual.name))
+        ));
+
+        this._elements.push(new Interaction(
+            "Disparo",
+            "[Poli] dispara a [Desafiador]",
+            new RolesDescriptor("Poli", [ "Desafiador", "Llorica" ]),
+            [
+                new Phrase("Poli", "Desafiador")
+                    .withAlternative(roles => "[Poli] no se lo piensa y dispara a bocajarro a [Desafiador]."),
+                new Phrase("Poli", "Desafiador")
+                    .withAlternative(roles => "Un disparo impacta en la frente de [Desafiador]. Sus sesos salen disparados y salpican a [Llorica]."),
+                new Phrase("Poli")
+                    .withAlternative(roles => "[Poli]: ¡Amenaza interceptada!"),
+                new Phrase("Llorica")
+                    .withAlternative(roles => "[Llorica]: ¡Pero qué puto asco! ¡Esto es una pesadilla!"),
+            ],
+            Timing.Single,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("LlamadaPolicia"))
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length > 0
+                && roles.get("Desafiador").IsActive
+                && roles.get("Desafiador").Characteristics.is("Estudiante")
+                && map.getUbication(roles.get("Desafiador")).name === "Sotano"
+                && postconditions.exists(Sentence.build("Desafio", roles.get("Desafiador").Individual.name))
+                && roles.get("Llorica").IsActive
+                && roles.get("Llorica").Characteristics.is("Estudiante")
+                && map.getUbication(roles.get("Llorica")).name === "Sotano"
+                && roles.get("Poli").IsActive
+                && roles.get("Poli").Characteristics.is("Policia")
+                && map.getUbication(roles.get("Poli")).name === "Sotano",
+            (roles, map) => new TruthTable()
+                .with(Sentence.build("Fin"))
+        ));
+
+        this._elements.push(new Interaction(
+            "CasoCerrado",
+            "Todo el mundo se rinde",
+            new RolesDescriptor("PrimerOficial", [ "SegundoOficial" ]),
+            [
+                new Phrase("PrimerOficial", "SegundoOficial")
+                    .withAlternative(roles => "[PrimerOficial]: Todos los sospechosos están bajo custodia [SegundoOficial]."),
+                new Phrase("SegundoOficial", "PrimerOficial")
+                    .withAlternative(roles => "[SegundoOficial]: Buen trabajo [PrimerOficial]. Cerremos de una vez este día infernal."),
+            ],
+            Timing.GlobalSingle,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("LlamadaPolicia"))
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length > 0
+                && roles.get("PrimerOficial").IsActive
+                && roles.get("PrimerOficial").Characteristics.is("Policia")
+                && map.getUbication(roles.get("PrimerOficial")).name === "Sotano"
+                && roles.get("SegundoOficial").IsActive
+                && roles.get("SegundoOficial").Characteristics.is("Policia")
+                && map.getUbication(roles.get("SegundoOficial")).name === "Sotano"
+                && postconditions.elements.filter(sentence => sentence.function.name === "Rendido").length >= 4,
+            (roles, map) => new TruthTable()
+                .with(Sentence.build("Fin"))
         ));
 
         this._elements.push(new Interaction(

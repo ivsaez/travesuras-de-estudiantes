@@ -483,6 +483,7 @@ export class InteractionRepository{
                 && Alcoholic.to(roles.get("Servido")).glass.isEmpty()
                 && map.getUbication(roles.get("Servido")).name === "Sotano"
                 && postconditions.exists(Sentence.build("Botellas"))
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length === 0
                 && postconditions.exists(Sentence.build("Saludo", roles.get("Servidor").Individual.name, roles.get("Servido").Individual.name, true)),
                 (roles, map) => {
                     return TruthTable.empty;
@@ -532,6 +533,7 @@ export class InteractionRepository{
                 && Alcoholic.to(roles.get("Servido")).glass.isEmpty()
                 && map.getUbication(roles.get("Servido")).name === "Sotano"
                 && postconditions.exists(Sentence.build("Botellas"))
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length === 0
                 && postconditions.exists(Sentence.build("Saludo", roles.get("Servidor").Individual.name, roles.get("Servido").Individual.name, true)),
                 (roles, map) => {
                     return TruthTable.empty;
@@ -555,6 +557,7 @@ export class InteractionRepository{
                 && map.getUbication(roles.get("Servidor")).name === "Sotano"
                 && Alcoholic.is(roles.get("Servidor"))
                 && Alcoholic.to(roles.get("Servidor")).glass.isEmpty()
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length === 0
                 && postconditions.exists(Sentence.build("Botellas")),
                 (roles, map) => {
                     Alcoholic.to(roles.get("Servidor")).glass.fill();
@@ -835,6 +838,7 @@ export class InteractionRepository{
                 && Lifed.is(roles.get("Hostiado"))
                 && roles.get("Hostiado").Characteristics.is("Profesor")
                 && postconditions.exists(Sentence.build("PrimeraHostia"))
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length === 0
                 && !postconditions.exists(Sentence.build("PrimeraRajada")),
                 (roles, map) => {
                     Lifed.to(roles.get("Hostiado")).hitSoft();
@@ -876,6 +880,7 @@ export class InteractionRepository{
                 && roles.get("Hostiado").IsActive
                 && Lifed.is(roles.get("Hostiado"))
                 && roles.get("Hostiado").Characteristics.is("Profesor")
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length === 0
                 && postconditions.exists(Sentence.build("PrimeraRajada")),
                 (roles, map) => {
                     Lifed.to(roles.get("Hostiado")).hitSoft();
@@ -1081,6 +1086,7 @@ export class InteractionRepository{
             (postconditions, roles, map) => 
                 roles.get("Amenazador").IsActive
                 && roles.get("Amenazador").Characteristics.is("Profesor")
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length === 0
                 && postconditions.exists(Sentence.build("PrimeraHostia")),
             (roles, map) => TruthTable.empty
         ));
@@ -1119,6 +1125,7 @@ export class InteractionRepository{
                         && map.getUbication(roles.get("Desplazado")).name === "Sotano"
                         && roles.get("Desplazado").Happiness.isUnhappy
                         && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Estudiante")).length > 1
+                        && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length === 0
                         && postconditions.exists(Sentence.build("PrimeraHostia"))
                         && !postconditions.exists(Sentence.build("Muerto"))
                 },
@@ -1151,6 +1158,7 @@ export class InteractionRepository{
                 && Concienced.is(roles.get("Desplazado"))
                 && Concienced.to(roles.get("Desplazado")).concience.isGood
                 && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Estudiante")).length > 1
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length === 0
                 && postconditions.exists(Sentence.build("PrimeraHostia"))
                 && !postconditions.exists(Sentence.build("Muerto")),
             (roles, map) => 
@@ -1439,6 +1447,7 @@ export class InteractionRepository{
                 && roles.get("Rajado").IsActive
                 && Lifed.is(roles.get("Rajado"))
                 && roles.get("Rajado").Characteristics.is("Profesor")
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length === 0
                 && postconditions.exists(Sentence.build("PrimeraRajada")),
                 (roles, map) => {
                     Lifed.to(roles.get("Rajado")).hitHard();
@@ -1480,7 +1489,7 @@ export class InteractionRepository{
                 && roles.get("Mirado").IsActive
                 && map.getUbication(roles.get("Mirado")).name === "Sotano"
                 && (roles.get("Mirado").Characteristics.is("Estudiante") || roles.get("Mirado").Characteristics.is("Profesor"))
-                && postconditions.exists(Sentence.build("PrimeraHostia")),
+                && postconditions.exists(Sentence.build("PrimeraRajada")),
             (roles, map) => TruthTable.empty
         ));
 
@@ -1504,6 +1513,7 @@ export class InteractionRepository{
             (postconditions, roles, map) => 
                 roles.get("Llorica").IsActive
                 && roles.get("Llorica").Characteristics.is("Profesor")
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length === 0
                 && postconditions.exists(Sentence.build("PrimeraRajada")),
             (roles, map) => TruthTable.empty
         ));
@@ -1581,6 +1591,7 @@ export class InteractionRepository{
             (postconditions, roles, map) => 
                 roles.get("Pedidor").IsActive
                 && roles.get("Pedidor").Characteristics.is("Profesor")
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length === 0
                 && postconditions.exists(Sentence.build("PrimeraRajada")),
             (roles, map) => TruthTable.empty
         ));
@@ -1653,6 +1664,153 @@ export class InteractionRepository{
                 return new TruthTable()
                     .with(Sentence.build("LlamadaPolicia"))
             }
+        ));
+
+        this._elements.push(new Interaction(
+            "LlegaLaLey",
+            "Llega la policía",
+            new RolesDescriptor("PrimerOficial", [ "SegundoOficial", "Complice" ]),
+            [
+                new Phrase("PrimerOficial", "SegundoOficial")
+                    .withAlternative(roles => "Alguien da una tremenda patada a la puerta. Dos agentes de policía, [PrimerOficial] y [SegundoOficial], entran en el sótano seguidos de Susi."),
+                new Phrase("PrimerOficial")
+                    .withAlternative(roles => "[PrimerOficial]: ¡Todo el mundo al suelo me cago en mi puta vida!"),
+                new Phrase("SegundoOficial")
+                    .withAlternative(roles => "[SegundoOficial]: ¡Llegó la ley!"),
+                new Phrase("Complice")
+                    .withAlternative(roles => "[Complice]: Lo siento mucho... había que parar esto."),
+            ],
+            Timing.GlobalSingle,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("LlamadaPolicia"))
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length === 0
+                && roles.get("PrimerOficial").IsActive
+                && roles.get("PrimerOficial").Characteristics.is("Policia")
+                && roles.get("PrimerOficial").Aspect.sex === SexKind.Male
+                && map.getUbication(roles.get("PrimerOficial")).name === "Comisaria"
+                && roles.get("SegundoOficial").IsActive
+                && roles.get("SegundoOficial").Characteristics.is("Policia")
+                && roles.get("SegundoOficial").Aspect.sex === SexKind.Female
+                && map.getUbication(roles.get("SegundoOficial")).name === "Comisaria"
+                && roles.get("Complice").IsActive
+                && roles.get("Complice").Characteristics.is("Estudiante")
+                && map.getUbication(roles.get("Complice")).name === "Comisaria",
+            (roles, map) => {
+                map.move(roles.get("PrimerOficial"), map.getLocation("Sotano"));
+                map.move(roles.get("SegundoOficial"), map.getLocation("Sotano"));
+                map.move(roles.get("Complice"), map.getLocation("Sotano"));
+                return new TruthTable()
+                    .with(Sentence.build("LlamadaPolicia"))
+            }
+        ));
+
+        this._elements.push(new Interaction(
+            "AcusarTraicion",
+            "[Acusador] acusa e traición",
+            new RolesDescriptor("Acusador", [ "Acusado" ]),
+            [
+                new Phrase("Acusador", "Acusado")
+                    .withAlternative(roles => "[Acusador]: Me cago en todo [Acusado], ¡eres una puta chivata!",
+                        roles => new Effect("Acusado", [
+                            EffectComponent.negative(EffectKind.Friend, EffectStrength.Medium),
+                            EffectComponent.negative(EffectKind.Happiness, EffectStrength.Medium),
+                        ])),
+                new Phrase("Acusado")
+                    .withAlternative(roles => "[Acusado]: ¡Lo siento joder!")
+            ],
+            Timing.GlobalSingle,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("LlamadaPolicia"))
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length > 0
+                && roles.get("Acusador").IsActive
+                && roles.get("Acusador").Characteristics.is("Estudiante")
+                && roles.get("Acusador").Aspect.sex === SexKind.Male
+                && map.getUbication(roles.get("Acusador")).name === "Sotano"
+                && roles.get("Acusado").IsActive
+                && roles.get("Acusado").Characteristics.is("Estudiante")
+                && roles.get("Acusado").Aspect.sex === SexKind.Female
+                && roles.get("Acusado").Name === "Susi"
+                && map.getUbication(roles.get("Acusado")).name === "Sotano",
+            (roles, map) => TruthTable.empty
+        ));
+
+        this._elements.push(new Interaction(
+            "DaRazon",
+            "[Razonero] da la razón a [Razonado]",
+            new RolesDescriptor("Razonero", [ "Razonado" ]),
+            [
+                new Phrase("Razonero", "Razonado")
+                    .withAlternative(roles => "[Razonero]: Yo creo que [Razonado] ha hecho lo mejor. Esto se nos ha ido mucho de las manos.",
+                    roles => new Effect("Razonado", [
+                        EffectComponent.positive(EffectKind.Friend, EffectStrength.Medium),
+                        EffectComponent.positive(EffectKind.Happiness, EffectStrength.Medium),
+                    ])),
+                new Phrase("Razonado")
+                    .withAlternative(roles => "[Razonado]: Gracias [Razonero], eres mi alma gemela.")
+            ],
+            Timing.GlobalSingle,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("LlamadaPolicia"))
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length > 0
+                && roles.get("Razonero").IsActive
+                && roles.get("Razonero").Characteristics.is("Estudiante")
+                && roles.get("Razonero").Aspect.sex === SexKind.Female
+                && map.getUbication(roles.get("Razonero")).name === "Sotano"
+                && roles.get("Razonado").IsActive
+                && roles.get("Razonado").Characteristics.is("Estudiante")
+                && roles.get("Razonado").Aspect.sex === SexKind.Female
+                && roles.get("Razonado").Name === "Susi"
+                && map.getUbication(roles.get("Razonado")).name === "Sotano",
+            (roles, map) => TruthTable.empty
+        ));
+
+        this._elements.push(new Interaction(
+            "AyudaPolicia",
+            "[Pedidor] pide ayuda a la policia",
+            new RolesDescriptor("Pedidor", [ "Poli" ]),
+            [
+                new Phrase("Pedidor")
+                    .withAlternative(roles => randomFromList([
+                        "[Pedidor]: ¡Agentes! ¡Por fin! ¡Ayúdenme!",
+                        "[Pedidor]: ¡Policía socorro!",
+                        "[Pedidor]: ¡Deténganlos! ¡Deténganlos a todos!",
+                    ])),
+                new Phrase("Poli")
+                    .withAlternative(roles => "[Poli]: Tranquilo señor, está todo bajo control.")
+            ],
+            Timing.Repeteable,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("LlamadaPolicia"))
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length > 0
+                && roles.get("Pedidor").IsActive
+                && roles.get("Pedidor").Characteristics.is("Profesor")
+                && roles.get("Poli").IsActive
+                && roles.get("Poli").Characteristics.is("Policia")
+                && map.getUbication(roles.get("Poli")).name === "Sotano",
+            (roles, map) => TruthTable.empty
+        ));
+
+        this._elements.push(new Interaction(
+            "PoliciaCalma",
+            "[Pedidor] pide calma",
+            new RolesDescriptor("Pedidor"),
+            [
+                new Phrase("Pedidor")
+                    .withAlternative(roles => randomFromList([
+                        "[Pedidor]: Calma todo el mundo.",
+                        "[Pedidor]: A ver a ver, se me tranquiliza todo el mundo.",
+                        "[Pedidor]: Tranquilitos todos, no se me pongan nerviosos.",
+                    ]))
+            ],
+            Timing.Repeteable,
+            (postconditions, roles, map) => 
+                postconditions.exists(Sentence.build("LlamadaPolicia"))
+                && map.getLocation("Sotano").agents.filter(agent => agent.Characteristics.is("Policia")).length > 0
+                && roles.get("Pedidor").IsActive
+                && roles.get("Pedidor").Characteristics.is("Policia")
+                && roles.get("Pedidor").Aspect.sex === SexKind.Female
+                && map.getUbication(roles.get("Pedidor")).name === "Sotano",
+            (roles, map) => TruthTable.empty
         ));
 
         this._elements.push(new Interaction(

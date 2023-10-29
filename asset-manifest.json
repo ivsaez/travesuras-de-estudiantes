@@ -1,0 +1,32 @@
+{
+  "files": {
+    "main.css": "/travesuras-de-estudiantes/static/css/main.22a7effa.css",
+    "main.js": "/travesuras-de-estudiantes/static/js/main.be8993b3.js",
+    "static/media/mari_unhappy.png": "/travesuras-de-estudiantes/static/media/mari_unhappy.e098fa9c7e8d549ed635.png",
+    "static/media/paco_happy.png": "/travesuras-de-estudiantes/static/media/paco_happy.db0d9a8fe7602b3dfc7f.png",
+    "static/media/mari_happy.png": "/travesuras-de-estudiantes/static/media/mari_happy.ebf607ec61b0174a29b4.png",
+    "static/media/mari_normal.png": "/travesuras-de-estudiantes/static/media/mari_normal.29d253066458e4f97f61.png",
+    "static/media/paco_normal.png": "/travesuras-de-estudiantes/static/media/paco_normal.3dcff77bee02b876104f.png",
+    "static/media/paco_unhappy.png": "/travesuras-de-estudiantes/static/media/paco_unhappy.465733e98cfcdf41c9db.png",
+    "static/media/susi_happy.png": "/travesuras-de-estudiantes/static/media/susi_happy.e60acfae5b4c8f4eed77.png",
+    "static/media/susi_unhappy.png": "/travesuras-de-estudiantes/static/media/susi_unhappy.07a8d437252268bc252f.png",
+    "static/media/susi_normal.png": "/travesuras-de-estudiantes/static/media/susi_normal.575a752231680e04adc1.png",
+    "static/media/eladio_normal.png": "/travesuras-de-estudiantes/static/media/eladio_normal.b0a6d18352c1c5f031b6.png",
+    "static/media/almudena_normal.png": "/travesuras-de-estudiantes/static/media/almudena_normal.841d575c036647196d59.png",
+    "static/media/sebas_unhappy.png": "/travesuras-de-estudiantes/static/media/sebas_unhappy.2addd87c2e7dbc8209c5.png",
+    "static/media/sebas_happy.png": "/travesuras-de-estudiantes/static/media/sebas_happy.e845f64529c59f3114f5.png",
+    "static/media/sebas_normal.png": "/travesuras-de-estudiantes/static/media/sebas_normal.b51b46d1c425502c99df.png",
+    "static/media/goiko_unhappy.png": "/travesuras-de-estudiantes/static/media/goiko_unhappy.4b18757b3dc0dac6f7b5.png",
+    "static/media/goiko_normal.png": "/travesuras-de-estudiantes/static/media/goiko_normal.d1ac9ab84db1d78f1c0c.png",
+    "static/media/goiko_happy.png": "/travesuras-de-estudiantes/static/media/goiko_happy.556ad58758f94dface72.png",
+    "static/media/paco_bolsa.png": "/travesuras-de-estudiantes/static/media/paco_bolsa.9900f7cc7bdc8a3e9529.png",
+    "static/media/logo.png": "/travesuras-de-estudiantes/static/media/logo.24058b33bfc4d531290d.png",
+    "index.html": "/travesuras-de-estudiantes/index.html",
+    "main.22a7effa.css.map": "/travesuras-de-estudiantes/static/css/main.22a7effa.css.map",
+    "main.be8993b3.js.map": "/travesuras-de-estudiantes/static/js/main.be8993b3.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.22a7effa.css",
+    "static/js/main.be8993b3.js"
+  ]
+}

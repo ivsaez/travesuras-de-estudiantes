@@ -17,6 +17,8 @@ import mari_unhappy from './images/mari_unhappy.png';
 import goiko_happy from './images/goiko_happy.png';
 import goiko_normal from './images/goiko_normal.png';
 import goiko_unhappy from './images/goiko_unhappy.png';
+import eladio_normal from './images/eladio_normal.png';
+import almudena_normal from './images/almudena_normal.png';
 
 export function buildPortraitFor(agent: Agent, postconditions: TruthTable): string{
     if(agent.Name === "Paco"){
@@ -58,6 +60,12 @@ export function buildPortraitFor(agent: Agent, postconditions: TruthTable): stri
                 ? goiko_unhappy
                 : goiko_normal;
     }
-    
+    else if(agent.Name === "Eladio"){
+        return eladio_normal;
+    }
+    else if(agent.Name === "Almudena"){
+        return almudena_normal;
+    }
+
     return "";
 }
